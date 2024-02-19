@@ -2,10 +2,12 @@ package com.core.toy3.src.travel.entity;
 
 import com.core.toy3.common.constant.State;
 import com.core.toy3.common.entity.BaseEntity;
+import com.core.toy3.src.like.entity.Like;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -28,5 +30,12 @@ public class Travel extends BaseEntity {
 
     private LocalDateTime departureTime;
     private LocalDateTime arrivalTime;
+
+    @OneToMany(mappedBy = "travel")
+    private List<Like> likes;
+
+    public int getLikeCount() {
+        return likes != null ? likes.size() : 0;
+    }
 }
 
