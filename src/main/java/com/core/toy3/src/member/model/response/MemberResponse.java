@@ -1,11 +1,15 @@
 package com.core.toy3.src.member.model.response;
 
 import com.core.toy3.src.member.entity.Member;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
 @Builder
+@ToString
+@AllArgsConstructor
 public class MemberResponse {
   private Long id;
   private String username;
