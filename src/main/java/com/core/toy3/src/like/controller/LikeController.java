@@ -7,7 +7,7 @@ import com.core.toy3.src.like.service.LikeService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/likes")
+@RequestMapping("/likes")
 public class LikeController {
 
     private final LikeService likeService;
@@ -18,7 +18,7 @@ public class LikeController {
 
     @PostMapping
     public Response<LikeResponse> createLike(@RequestBody LikeRequest likeRequest) {
-        // likeService.createLike(likeRequest)를 호출하여 생성한 LikeResponse를 반환한다 가정
+        // likeService.createLike(likeRequest)를 호출하여 생성한 LikeResponse를 반환
         LikeResponse likeResponse = likeService.createLike(likeRequest);
         return Response.response(likeResponse);
     }

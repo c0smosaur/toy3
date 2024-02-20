@@ -35,5 +35,4 @@ public class LikeService {
                 .orElseThrow(() -> new RuntimeException("Member not found with ID: " + likeRequest.getMemberId()));
     }
 
-    // 다른 필요한 비즈니스 로직 및 메서드들을 추가
 }
