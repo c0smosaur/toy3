@@ -24,9 +24,11 @@ public class Like {
     @JoinColumn(name = "travel_id")
     private Travel travel;
 
-    public Like(Member member, Travel travel) {
-        this.member = member;
-        this.travel = travel;
-    }
+    public static Like createLike(Member member, Travel travel) {
+        return Like.builder()
+                .member(member)
+                .travel(travel)
+                .build();
 
+    }
 }

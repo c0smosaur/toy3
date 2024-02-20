@@ -1,10 +1,11 @@
-// LikeService.java
 package com.core.toy3.src.like.service;
 
 import com.core.toy3.src.like.entity.Like;
 import com.core.toy3.src.like.model.request.LikeRequest;
 import com.core.toy3.src.like.model.response.LikeResponse;
 import com.core.toy3.src.like.repository.LikeRepository;
+import com.core.toy3.src.member.entity.Member;
+import com.core.toy3.src.travel.entity.Travel;
 import com.core.toy3.src.travel.repository.TravelRepository;
 import com.core.toy3.src.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
@@ -25,14 +26,15 @@ public class LikeService {
 
     @Transactional
     public LikeResponse createLike(LikeRequest likeRequest) {
-        return memberRepository.findById(likeRequest.getMemberId())
-                .map(member -> travelRepository.findById(likeRequest.getTravelId())
-                        .map(travel -> {
-                            Like like = likeRepository.save(new Like(member, travel));
-                            return new LikeResponse(like.getId());
-                        })
-                        .orElseThrow(() -> new RuntimeException("Travel not found with ID: " + likeRequest.getTravelId())))
+        Member member = memberRepository.findById(likeRequest.getMemberId())
                 .orElseThrow(() -> new RuntimeException("Member not found with ID: " + likeRequest.getMemberId()));
-    }
 
+        Travel travel = travelRepository.findById(likeRequest.getTravelId())
+                .orElseThrow(() -> new RuntimeException("Travel not found with ID: " + likeRequest.getTravelId()));
+
+        Like like = Like.createLike(member, travel);
+        likeRepository.save(like);
+
+        return LikeResponse.fromEntity(like);
+    }
 }

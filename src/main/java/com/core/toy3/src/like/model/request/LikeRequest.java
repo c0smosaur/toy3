@@ -10,6 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LikeRequest {
-    private Long memberId;
-    private Long travelId;
+    private Integer memberId;
+    private Integer travelId;
 }
