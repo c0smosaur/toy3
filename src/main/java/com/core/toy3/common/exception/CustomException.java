@@ -16,7 +16,6 @@ public class CustomException extends RuntimeException {
         this.message = "";
     }
 
-
     public String getMessage() {
         if(message.isEmpty()) {
             return status.getMessage();

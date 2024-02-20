@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler()
+    @ExceptionHandler(CustomException.class)
     public ResponseEntity<Response> CustomExceptionHandler(CustomException e) {
         log.warn("[AppException Occurs] message: {} HttpStatusCode: {}", e.getStatus().getMessage(),
                 e.getStatus().getStatusCode());
