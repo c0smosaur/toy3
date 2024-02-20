@@ -2,6 +2,7 @@ package com.core.toy3.src.travel.entity;
 
 import com.core.toy3.common.constant.State;
 import com.core.toy3.common.entity.BaseEntity;
+import com.core.toy3.src.travel.model.request.TravelRequest;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,5 +29,17 @@ public class Travel extends BaseEntity {
 
     private LocalDateTime departureTime;
     private LocalDateTime arrivalTime;
+
+    public static Travel fromRequest(TravelRequest travelRequest) {
+        return Travel.builder()
+                .travelName(travelRequest.getTravelName())
+                .state(travelRequest.getState())
+                .departure(travelRequest.getDeparture())
+                .arrival(travelRequest.getArrival())
+                .departureTime(travelRequest.getDepartureTime())
+                .arrivalTime(travelRequest.getArrivalTime())
+                .build();
+
+    }
 }
 

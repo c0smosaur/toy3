@@ -2,6 +2,7 @@ package com.core.toy3.common.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -10,6 +11,9 @@ import static org.springframework.http.HttpStatus.OK;
 public enum ResponseStatus {
 
     SUCCESS(true, OK.value(), "요청에 성공했습니다.");
+
+
+
 
 
     private final boolean isSuccess;
