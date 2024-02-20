@@ -24,7 +24,7 @@ public class TravelService {
 
     }
 
-    public Response<TravelResponse> getTravelDetails(Long travelId) {
+    public Response<TravelResponse> getTravelDetails(Integer travelId) {
         return travelRepository.findById(travelId)
                 .map(travel -> Response.response(new TravelResponse(travel.getLikeCount())))
                 .orElse(null);
