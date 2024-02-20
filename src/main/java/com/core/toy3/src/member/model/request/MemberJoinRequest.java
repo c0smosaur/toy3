@@ -1,8 +1,6 @@
 package com.core.toy3.src.member.model.request;
 
-
 import com.core.toy3.src.member.entity.Member;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -15,11 +13,22 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class MemberRequest {
+public class MemberJoinRequest {
+
   @Email
   @NotBlank
   private String username;
   @Min(4)
   @NotBlank
   private String password;
+  @NotBlank
+  private String name;
+
+  public static Member toEntity(MemberJoinRequest memberJoinRequest){
+    return Member.builder()
+            .username(memberJoinRequest.getUsername())
+            .password(memberJoinRequest.getPassword())
+            .name(memberJoinRequest.getName())
+            .build();
+  }
 }

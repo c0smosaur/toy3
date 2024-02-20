@@ -2,13 +2,11 @@ package com.core.toy3.src.member.entity;
 
 import com.core.toy3.common.entity.BaseEntity;
 import com.core.toy3.src.member.model.response.MemberResponse;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
