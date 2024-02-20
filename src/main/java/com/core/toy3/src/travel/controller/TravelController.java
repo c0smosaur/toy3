@@ -33,6 +33,24 @@ public class TravelController {
     @GetMapping("/read/{travelId}")
     public Response<TravelResponse> selectTravel(@PathVariable("travelId") Long id) {
 
-        return travelService.selectTravel(id);
+        return Response.response(travelService.selectTravel(id));
+    }
+
+    @PutMapping("/update-travel/{travelId}")
+    public Response<TravelResponse> updateTravel(
+            @PathVariable("travelId") long id,
+            @RequestBody TravelRequest travelRequest) {
+
+            return Response.response(travelService.updateTravel(id, travelRequest));
+    }
+
+    @DeleteMapping("/delete-travel/{travelId}")
+    public Response<String> deleteTravel(@PathVariable("travelId") Long id) {
+
+        Integer result = travelService.deleteTravel(id);
+
+        String resultMessage = result == 1 ? "삭제가 완료되었습니다." : "삭제에 실패했습니다.";
+
+        return Response.response(resultMessage);
     }
 }

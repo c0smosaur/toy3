@@ -5,6 +5,7 @@ import com.core.toy3.common.entity.BaseEntity;
 import com.core.toy3.src.travel.model.request.TravelRequest;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;
 
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @ToString(callSuper = true)
 @Builder
 @AllArgsConstructor
+//@Where(clause = "state = 'ACTIVE'") // 조회결과 제외가 아닌 일치하지 않는 데이터 조회시 예외 처리하도록 설정
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Travel extends BaseEntity {
 
@@ -33,7 +35,7 @@ public class Travel extends BaseEntity {
     public static Travel fromRequest(TravelRequest travelRequest) {
         return Travel.builder()
                 .travelName(travelRequest.getTravelName())
-                .state(travelRequest.getState())
+                .state(State.ACTIVE)
                 .departure(travelRequest.getDeparture())
                 .arrival(travelRequest.getArrival())
                 .departureTime(travelRequest.getDepartureTime())
@@ -41,5 +43,16 @@ public class Travel extends BaseEntity {
                 .build();
 
     }
+
+    public void update(TravelRequest travelRequest) {
+
+        this.travelName = travelRequest.getTravelName();
+        this.departure = travelRequest.getDeparture();
+        this.arrival = travelRequest.getArrival();
+        this.departureTime = travelRequest.getDepartureTime();
+        this.arrivalTime = travelRequest.getArrivalTime();
+    }
+
+
 }
 
