@@ -17,16 +17,15 @@ public class Like {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
-
-    @ManyToOne
     @JoinColumn(name = "travel_id")
     private Travel travel;
 
-    public static Like createLike(Member member, Travel travel) {
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
+
+    public static Like createLike(Travel travel) {
         return Like.builder()
-                .member(member)
                 .travel(travel)
                 .build();
 

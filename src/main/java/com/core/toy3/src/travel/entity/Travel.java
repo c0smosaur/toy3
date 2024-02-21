@@ -34,6 +34,10 @@ public class Travel extends BaseEntity {
     private LocalDateTime departureTime;
     private LocalDateTime arrivalTime;
 
+    public Travel(long id, String 대구여행, State state, String 서울, String 대구, LocalDateTime now, LocalDateTime now1, int like) {
+        super();
+    }
+
     public static Travel fromRequest(TravelRequest travelRequest) {
         return Travel.builder()
                 .travelName(travelRequest.getTravelName())
@@ -54,8 +58,6 @@ public class Travel extends BaseEntity {
         this.departureTime = travelRequest.getDepartureTime();
         this.arrivalTime = travelRequest.getArrivalTime();
     }
-
-
 
     @OneToMany(mappedBy = "travel")
     private List<Like> likes;

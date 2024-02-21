@@ -19,8 +19,7 @@ public class LikeController {
     // 좋아요 추가 또는 취소
     @PostMapping
     public Response<LikeResponse> createAndCancelLike(@RequestBody LikeRequest likeRequest) {
-        LikeResponse likeResponse = likeService.createAndCancelLike(likeRequest);
-        return Response.response(likeResponse);
+        return likeService.createAndCancelLike(likeRequest);
     }
 
 }

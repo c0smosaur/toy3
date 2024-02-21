@@ -7,7 +7,10 @@ import com.core.toy3.src.travel.entity.Travel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
-public interface LikeRepository extends JpaRepository<Like, Integer> {
-    Like findByMemberAndTravel(Member member, Travel travel);
+public interface LikeRepository extends JpaRepository<Like, Long> {
+    Like findByTravel(Travel travel);
+    List<Like> findByMember(Member member);
 }

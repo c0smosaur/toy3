@@ -1,32 +1,17 @@
 package com.core.toy3.src.travel.service;
 
 import com.core.toy3.common.response.Response;
-import com.core.toy3.src.like.repository.LikeRepository;
-import com.core.toy3.src.member.entity.Member;
-import com.core.toy3.src.member.repository.MemberRepository;
 import com.core.toy3.src.travel.entity.Travel;
 import com.core.toy3.src.travel.model.response.TravelResponse;
 import com.core.toy3.src.travel.repository.TravelRepository;
-
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import com.core.toy3.common.exception.CustomException;
-import com.core.toy3.src.travel.entity.Travel;
 import com.core.toy3.src.travel.model.request.TravelRequest;
-import com.core.toy3.src.travel.model.response.TravelResponse;
-import com.core.toy3.src.travel.repository.TravelRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.stream.Collectors;
-
 import static com.core.toy3.common.response.ResponseStatus.*;
 
 @Service
@@ -35,10 +20,6 @@ public class TravelService {
 
     private final TravelRepository travelRepository;
 
-    public TravelService(TravelRepository travelRepository) {
-        this.travelRepository = travelRepository;
-
-    }
     @Transactional
     public TravelResponse createTravel(TravelRequest travelRequest) {
 
@@ -110,10 +91,8 @@ public class TravelService {
                 .orElseThrow(() -> new CustomException(DELETE_IS_FAIL));
 
     }
-}
-
-    public Response<TravelResponse> getTravelDetails(Integer travelId) {
-        return travelRepository.findById(travelId)
+    public Response<TravelResponse> getTravelDetails(Long id) {
+        return travelRepository.findById(id)
                 .map(travel -> Response.response(new TravelResponse(travel.getLikeCount())))
                 .orElse(null);
     }
