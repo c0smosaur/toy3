@@ -18,13 +18,21 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class SwaggerConfig {
 
-    String[] paths = {""};
+    String[] paths = {"/travel", "/trip"};
 
     @Bean
-    public GroupedOpenApi getTodoApi() {
+    public GroupedOpenApi getTravelApi() {
         return GroupedOpenApi.builder()
-                .group("")
-                .pathsToMatch(paths[0] + "/**")
+                .group("travel")
+                .pathsToMatch("/travel" + "/**")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi getTripApi() {
+        return GroupedOpenApi.builder()
+                .group("trip")
+                .pathsToMatch("/trip" + "/**")
                 .build();
     }
 }
