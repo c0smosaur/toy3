@@ -26,7 +26,10 @@ class AuthMemberServiceTest {
     Member member = memberService.memberRegister(memberJoinRequest);
 
     UserDetails userDetails = authMemberService.loadUserByUsername(member.getUsername());
-    assertTrue(userDetails.getUsername().equals(member.getUsername()));
+    assertEquals(userDetails.getUsername(), member.getUsername());
+
+    assertThrows(UsernameNotFoundException.class,
+            () -> authMemberService.loadUserByUsername("bbb@bbb.com"));
   }
 
 }

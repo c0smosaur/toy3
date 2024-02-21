@@ -55,7 +55,7 @@ class MemberControllerTest {
 
     Response<UserDetails> response = controller.login(memberRequest, session);
 
-    assertEquals(response.getData().getUsername(), memberJoinRequest.getUsername()); // Assuming Response has a getData() method.
+    assertEquals(response.getData().getUsername(), memberJoinRequest.getUsername());
     assertNotNull(session.getAttribute("member"));
   }
 
@@ -66,7 +66,7 @@ class MemberControllerTest {
     Response<UserDetails> response = controller.login(memberRequest, session);
     Response<String> response1 = controller.logout(session);
 
-    assertEquals("Logged out", response1.getData()); // Assuming Response has a getData() method.
+    assertEquals("Logged out", response1.getData());
     assertNull(session.getAttribute("member"));
   }
 }

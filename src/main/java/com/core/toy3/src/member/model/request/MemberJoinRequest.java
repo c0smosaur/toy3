@@ -23,12 +23,4 @@ public class MemberJoinRequest {
   private String password;
   @NotBlank
   private String name;
-
-  public static Member toEntity(MemberJoinRequest memberJoinRequest){
-    return Member.builder()
-            .username(memberJoinRequest.getUsername())
-            .password(memberJoinRequest.getPassword())
-            .name(memberJoinRequest.getName())
-            .build();
-  }
 }

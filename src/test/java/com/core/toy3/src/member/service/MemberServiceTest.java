@@ -1,6 +1,7 @@
 package com.core.toy3.src.member.service;
 
 import com.core.toy3.common.exception.CustomException;
+import com.core.toy3.common.response.Response;
 import com.core.toy3.src.member.entity.Member;
 import com.core.toy3.src.member.model.request.MemberJoinRequest;
 import com.core.toy3.src.member.model.request.MemberRequest;
@@ -33,6 +34,10 @@ class MemberServiceTest {
 
     Member member = memberService.memberRegister(memberJoinRequest);
     MemberResponse memberResponse = MemberResponse.fromEntity(member);
-    assertTrue(memberResponse.getUsername().equals(memberJoinRequest.getUsername()));
+    assertEquals(memberResponse.getUsername(), memberJoinRequest.getUsername());
+
+    CustomException exception = assertThrows(CustomException.class,
+            () -> memberService.memberRegister(memberJoinRequest));
+    assertEquals("이미 등록된 이메일입니다.",exception.getMessage());
   }
 }
