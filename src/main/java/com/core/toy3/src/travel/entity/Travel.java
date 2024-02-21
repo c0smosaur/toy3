@@ -2,11 +2,10 @@ package com.core.toy3.src.travel.entity;
 
 import com.core.toy3.common.constant.State;
 import com.core.toy3.common.entity.BaseEntity;
-import com.core.toy3.src.like.entity.Like;
+import com.core.toy3.src.like.entity.UserLike;
 import com.core.toy3.src.travel.model.request.TravelRequest;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -60,7 +59,7 @@ public class Travel extends BaseEntity {
     }
 
     @OneToMany(mappedBy = "travel")
-    private List<Like> likes;
+    private List<UserLike> likes;
 
     public int getLikeCount() {
         return likes != null ? likes.size() : 0;

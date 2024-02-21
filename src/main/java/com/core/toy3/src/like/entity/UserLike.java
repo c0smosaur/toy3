@@ -10,7 +10,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Like {
+public class UserLike {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,8 +24,8 @@ public class Like {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    public static Like createLike(Travel travel) {
-        return Like.builder()
+    public static UserLike createUserLike(Travel travel) {
+        return UserLike.builder()
                 .travel(travel)
                 .build();
 

@@ -1,10 +1,10 @@
 package com.core.toy3.src.like.service;
 
 import com.core.toy3.common.response.Response;
-import com.core.toy3.src.like.entity.Like;
+import com.core.toy3.src.like.entity.UserLike;
 import com.core.toy3.src.like.model.request.LikeRequest;
 import com.core.toy3.src.like.model.response.LikeResponse;
-import com.core.toy3.src.like.repository.LikeRepository;
+import com.core.toy3.src.like.repository.UserLikeRepository;
 import com.core.toy3.src.member.entity.Member;
 import com.core.toy3.src.travel.entity.Travel;
 import com.core.toy3.src.travel.repository.TravelRepository;
@@ -18,11 +18,11 @@ import java.util.stream.Collectors;
 @Service
 public class LikeService {
 
-    private final LikeRepository likeRepository;
+    private final UserLikeRepository likeRepository;
     private final TravelRepository travelRepository;
     private final MemberRepository memberRepository;
 
-    public LikeService(LikeRepository likeRepository, TravelRepository travelRepository, MemberRepository memberRepository) {
+    public LikeService(UserLikeRepository likeRepository, TravelRepository travelRepository, MemberRepository memberRepository) {
         this.likeRepository = likeRepository;
         this.travelRepository = travelRepository;
         this.memberRepository = memberRepository;
@@ -34,11 +34,11 @@ public class LikeService {
         Travel travel = travelRepository.findById(likeRequest.getTravelId())
                 .orElseThrow(() -> new RuntimeException("Travel not found with ID: " + likeRequest.getTravelId()));
 
-        Like existingLike = likeRepository.findByTravel(travel);
+        UserLike existingLike = likeRepository.findByTravel(travel);
 
         if (existingLike == null) {
             // 좋아요가 없으면 새로 생성
-            Like like = Like.createLike(travel);
+            UserLike like = UserLike.createUserLike(travel);
             likeRepository.save(like);
             return Response.response(LikeResponse.fromEntity(like));
         } else {
@@ -55,7 +55,7 @@ public class LikeService {
                 .orElseThrow(() -> new RuntimeException("Member not found with ID: " + memberId));
 
         // Member가 좋아요를 누른 목록을 조회
-        List<Like> likes = likeRepository.findByMember(member);
+        List<UserLike> likes = likeRepository.findByMember(member);
 
         // LikeResponse로 변환하여 응답
         List<LikeResponse> likeResponses = likes.stream()

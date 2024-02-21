@@ -1,6 +1,6 @@
 package com.core.toy3.src.like.model.response;
 
-import com.core.toy3.src.like.entity.Like;
+import com.core.toy3.src.like.entity.UserLike;
 import lombok.*;
 
 @Getter
@@ -11,7 +11,7 @@ public class LikeResponse {
     private Long likeId;
     private Long travelId;
 
-    public static LikeResponse fromEntity(Like like) {
+    public static LikeResponse fromEntity(UserLike like) {
         return LikeResponse.builder()
                 .likeId(like.getId())
                 .travelId(like.getTravel().getId())

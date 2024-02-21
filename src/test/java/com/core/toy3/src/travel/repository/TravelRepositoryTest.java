@@ -45,7 +45,7 @@ class TravelRepositoryTest {
         travelRepository.save(travelData3);
 
         // when
-        List<Travel> travelActive = travelRepository.getAllTravelActive(State.ACTIVE);
+        List<Travel> travelActive = travelRepository.getAllTravelActive();
 
         // then
         Assertions.assertThat(travelActive)
