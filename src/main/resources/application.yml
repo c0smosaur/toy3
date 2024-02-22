@@ -1,1 +1,34 @@
+# swagger API ??
+springdoc:
+  api-docs:
+    path: /api-docs
+    version: openapi_3_0
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  swagger-ui:
+    operations-sorter: alpha
+    tags-sorter: alpha
+    path: /swagger-ui
+    disable-swagger-default-url: true
+    display-request-duration: true
+  paths-to-match:
+    - /**
 
+# H2-console ??
+spring:
+  h2:
+    console:
+      enabled: true
+  datasource:
+    hikari:
+      jdbc-url: jdbc:h2:mem:testdb
+  jpa:
+    # sql ?? ?? ?? ??
+    show_sql: true
+    properties:
+      hibernate:
+        # SQL ??? ??? ???? ?? ??? ?? Hibernate ??? ????? ??
+        use_sql_comments: true
+        # ?? ???
+        format_sql: true
+    open-in-view: false
