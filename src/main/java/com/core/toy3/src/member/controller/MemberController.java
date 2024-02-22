@@ -1,20 +1,21 @@
 package com.core.toy3.src.member.controller;
 
 import com.core.toy3.common.response.Response;
-import com.core.toy3.src.member.entity.AuthMember;
 import com.core.toy3.src.member.entity.Member;
 import com.core.toy3.src.member.model.request.MemberJoinRequest;
 import com.core.toy3.src.member.model.request.MemberRequest;
 import com.core.toy3.src.member.model.response.MemberResponse;
 import com.core.toy3.src.member.service.AuthMemberService;
 import com.core.toy3.src.member.service.MemberService;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -27,15 +28,26 @@ public class MemberController {
   private final MemberService memberService;
   @Autowired
   private final AuthMemberService authMemberService;
+  @Autowired
+  private AuthenticationManager authenticationManager;
+  @Autowired
+  private BCryptPasswordEncoder passwordEncoder;
 
   @GetMapping("/")
   public Response<String> testPage(){
-    return Response.response("page that just exists");
+    return Response.response("default page");
   }
 
-  // 가입
-  // 가입 후 새로 로그인 요구 OR 가입하자마자 로그인 유지
-  // 우선 결과 확인 위해 MemberResponse 반환하도록 설정, 추후 수정
+  @GetMapping("/logged")
+  public Response<String> loggedPage(){
+    return Response.response("login success");
+  }
+
+  @GetMapping("/error")
+  public Response<String> errorPage(){
+    return Response.response("login error");
+  }
+
   @PostMapping("/sign-up")
   public Response<MemberResponse> signUp(@RequestBody @Valid MemberJoinRequest member) throws Exception {
     Member joinedMember = memberService.memberRegister(member);
@@ -43,26 +55,20 @@ public class MemberController {
     return Response.response(data);
   }
 
-  // 로그인
-  // MemberResponse 담은 Response 반환
+  // REST API
   @PostMapping("/login")
-  public Response<UserDetails> login(
-          @RequestBody @Valid MemberRequest member,
-          HttpSession session) throws Exception{
-    AuthMember loggedMember = authMemberService.loadUserByUsername(member.getUsername());
+  public Response<MemberResponse> login(
+          @RequestBody @Valid MemberRequest memberRequest) throws Exception{
+    Authentication authentication = authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                    memberRequest.getUsername(),
+                    memberRequest.getPassword())
+    );
 
-    // 세션에 저장
-    session.setAttribute("member",loggedMember);
-    return Response.response(loggedMember);
-  }
+    SecurityContextHolder.getContext().setAuthentication(authentication);
 
-  // 로그아웃
-  // 세션에서 member 삭제, 문자열 담은 Response 반환
-  @GetMapping("/logout")
-  public Response<String> logout(HttpSession session) throws Exception{
-      session.invalidate();
-      return Response.response("Logged out");
+    MemberResponse memberResponse = MemberResponse.fromAuthentication(authentication);
 
-    // session 존재하지 않을 때 -> spring security로 인가 없을 때는 접근제한
+    return Response.response(memberResponse);
   }
 }

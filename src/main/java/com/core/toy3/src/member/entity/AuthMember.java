@@ -12,13 +12,15 @@ import java.util.Collections;
 @Setter
 public class AuthMember extends User {
 
+  private Long id;
   private Member member;
 
   public AuthMember(Member member){
     super(member.getUsername(),
             member.getPassword(),
             getAuthorities(member));
-    this.member = member;
+    this.id = member.getId();
+//    this.member = member;
   }
 
   private static Collection<GrantedAuthority> getAuthorities(Member member){
