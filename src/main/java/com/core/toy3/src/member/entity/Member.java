@@ -4,8 +4,11 @@ import com.core.toy3.common.entity.BaseEntity;
 import com.core.toy3.src.like.entity.UserLike;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Getter
@@ -26,4 +29,12 @@ public class Member extends BaseEntity {
   //Like 관계 및 여러 개의 좋아요를 가질 수 있음
   @OneToMany(mappedBy = "member")
   private final List<UserLike> likes = new ArrayList<>();
+
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    List<GrantedAuthority> authorities = new ArrayList<>();
+    authorities.add(new SimpleGrantedAuthority("USER"));
+
+    return authorities;
+  }
 }
