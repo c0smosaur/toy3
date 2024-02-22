@@ -1,7 +1,7 @@
-# swagger API ??
+# swagger API 설정
 springdoc:
   api-docs:
-    path: /api-docs
+    path: /api-docs/v1
     version: openapi_3_0
   default-consumes-media-type: application/json
   default-produces-media-type: application/json
@@ -14,7 +14,7 @@ springdoc:
   paths-to-match:
     - /**
 
-# H2-console ??
+# H2-console 설정
 spring:
   h2:
     console:
@@ -23,12 +23,12 @@ spring:
     hikari:
       jdbc-url: jdbc:h2:mem:testdb
   jpa:
-    # sql ?? ?? ?? ??
+    # sql 쿼리 콘솔 출력 허용
     show_sql: true
     properties:
       hibernate:
-        # SQL ??? ??? ???? ?? ??? ?? Hibernate ??? ????? ??
+        # SQL 쿼리에 주석을 추가하여 해당 쿼리가 어떤 Hibernate 쿼리에 해당하는지 식별
         use_sql_comments: true
-        # ?? ???
+        # 쿼리 포멧팅
         format_sql: true
     open-in-view: false
