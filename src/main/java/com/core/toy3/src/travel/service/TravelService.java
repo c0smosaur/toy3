@@ -1,5 +1,6 @@
 package com.core.toy3.src.travel.service;
 
+import com.core.toy3.common.constant.State;
 import com.core.toy3.common.exception.CustomException;
 import com.core.toy3.src.travel.entity.Travel;
 import com.core.toy3.src.travel.model.request.TravelRequest;
@@ -26,16 +27,21 @@ public class TravelService {
 
         Travel travel = getTravelFromRequest(travelRequest);
 
-        return TravelResponse.toResult(
-                travelRepository.save(travel));
+        return TravelResponse.toResult(travelRepository.save(travel));
     }
 
     private Travel getTravelFromRequest(TravelRequest travelRequest) {
 
         validateTravelDepartureTime(travelRequest);
 
-        return Travel.fromRequest(travelRequest);
-
+        return Travel.builder()
+                .travelName(travelRequest.getTravelName())
+                .state(State.ACTIVE)
+                .departure(travelRequest.getDeparture())
+                .arrival(travelRequest.getArrival())
+                .departureTime(travelRequest.getDepartureTime())
+                .arrivalTime(travelRequest.getArrivalTime())
+                .build();
     }
 
     private void validateTravelDepartureTime(TravelRequest travelRequest) {
@@ -53,10 +59,6 @@ public class TravelService {
     public List<TravelResponse> getAllravel() {
         // state가 ACTIVE인 데이터만 조회
         List<Travel> travelActive = travelRepository.getAllTravelActive();
-
-        if (travelActive.isEmpty()) {
-            throw new CustomException(EMPTY_TRAVEL);
-        }
 
         // Travel엔티티 list를 stream을 활용해 TravelResponse로 구성해서 리턴
         return travelActive.stream()
@@ -90,6 +92,5 @@ public class TravelService {
         return travelRepository.deleteTravelById(id)
                 .filter(result -> result == 1) // 1이 return 될 경우 삭제완료
                 .orElseThrow(() -> new CustomException(DELETE_IS_FAIL));
-
     }
 }

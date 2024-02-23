@@ -24,7 +24,7 @@ public class SwaggerConfig {
     public GroupedOpenApi getTravelApi() {
         return GroupedOpenApi.builder()
                 .group("travel")
-                .pathsToMatch("/travel" + "/**")
+                .pathsToMatch(paths[0] + "/**")
                 .build();
     }
 
@@ -32,7 +32,7 @@ public class SwaggerConfig {
     public GroupedOpenApi getTripApi() {
         return GroupedOpenApi.builder()
                 .group("trip")
-                .pathsToMatch("/trip" + "/**")
+                .pathsToMatch(paths[1] + "/**")
                 .build();
     }
 }

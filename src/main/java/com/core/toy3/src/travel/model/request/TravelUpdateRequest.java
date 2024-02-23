@@ -1,7 +1,9 @@
 package com.core.toy3.src.travel.model.request;
 
-import com.core.toy3.common.constant.State;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
@@ -9,7 +11,7 @@ import java.time.LocalDateTime;
 @Builder
 @ToString
 @AllArgsConstructor
-public class TravelRequest {
+public class TravelUpdateRequest {
 
     private String travelName;
     private String departure;
