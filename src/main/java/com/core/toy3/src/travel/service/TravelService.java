@@ -2,18 +2,23 @@ package com.core.toy3.src.travel.service;
 
 import com.core.toy3.common.constant.State;
 import com.core.toy3.common.exception.CustomException;
+import com.core.toy3.common.response.Response;
 import com.core.toy3.src.travel.entity.Travel;
 import com.core.toy3.src.travel.model.request.TravelRequest;
 import com.core.toy3.src.travel.model.response.TravelResponse;
 import com.core.toy3.src.travel.repository.TravelRepository;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import com.core.toy3.common.exception.CustomException;
+import com.core.toy3.src.travel.model.request.TravelRequest;
+import lombok.RequiredArgsConstructor;
+import java.time.LocalDateTime;
 import java.util.stream.Collectors;
-
 import static com.core.toy3.common.response.ResponseStatus.*;
 
 @Service
@@ -92,5 +97,11 @@ public class TravelService {
         return travelRepository.deleteTravelById(id)
                 .filter(result -> result == 1) // 1이 return 될 경우 삭제완료
                 .orElseThrow(() -> new CustomException(DELETE_IS_FAIL));
+
+    }
+    public Response<TravelResponse> getTravelDetails(Long id) {
+        return travelRepository.findById(id)
+                .map(travel -> Response.response(new TravelResponse(travel.getLikeCount())))
+                .orElse(null);
     }
 }

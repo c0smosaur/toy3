@@ -2,6 +2,7 @@ package com.core.toy3.src.travel.entity;
 
 import com.core.toy3.common.constant.State;
 import com.core.toy3.common.entity.BaseEntity;
+import com.core.toy3.src.like.entity.UserLike;
 import com.core.toy3.src.travel.model.request.TravelRequest;
 import com.core.toy3.src.trip.entity.Trip;
 import jakarta.persistence.*;
@@ -57,6 +58,13 @@ public class Travel extends BaseEntity {
         this.arrival = travelRequest.getArrival();
         this.departureTime = travelRequest.getDepartureTime();
         this.arrivalTime = travelRequest.getArrivalTime();
+    }
+
+    @OneToMany(mappedBy = "travel")
+    private List<UserLike> likes;
+
+    public int getLikeCount() {
+        return likes != null ? likes.size() : 0;
     }
 }
 
