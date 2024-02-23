@@ -4,6 +4,7 @@ import com.core.toy3.common.response.Response;
 import com.core.toy3.src.like.model.request.LikeRequest;
 import com.core.toy3.src.like.model.response.LikeResponse;
 import com.core.toy3.src.like.service.LikeService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,6 +15,7 @@ public class LikeController {
 
     private final LikeService likeService;
 
+    @Autowired
     public LikeController(LikeService likeService) {
         this.likeService = likeService;
     }
