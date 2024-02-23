@@ -1,8 +1,11 @@
 package com.core.toy3.src.travel.controller;
 
+import com.core.toy3.common.exception.CustomException;
 import com.core.toy3.common.response.Response;
+import com.core.toy3.common.response.ResponseStatus;
 import com.core.toy3.src.travel.model.request.TravelRequest;
 import com.core.toy3.src.travel.model.response.TravelResponse;
+import com.core.toy3.common.KakaoMapLocation;
 import com.core.toy3.src.travel.service.TravelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,9 +18,25 @@ import java.util.List;
 public class TravelController {
 
     private final TravelService travelService;
+    private final KakaoMapLocation kakaoMapLocation;
 
     @PostMapping("/create")
     public Response<TravelResponse> createTravel(@RequestBody TravelRequest travelRequest) {
+
+        try{
+            String departureLocation = kakaoMapLocation.getLocation(travelRequest.getDeparture());
+            String arrivalLocation = kakaoMapLocation.getLocation(travelRequest.getArrival());
+
+            if (!departureLocation.isEmpty()){
+                travelRequest.setDeparture(departureLocation);
+            }
+            if (!arrivalLocation.isEmpty()){
+                travelRequest.setArrival(arrivalLocation);
+            }
+
+        } catch (Exception e){
+            throw new CustomException(ResponseStatus.WRONG_ADDRESS);
+        }
 
         return Response.response(travelService.createTravel(travelRequest));
     }
