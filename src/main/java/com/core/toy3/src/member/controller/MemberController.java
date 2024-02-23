@@ -60,9 +60,7 @@ public class MemberController {
   public Response<UserDetails> login(
           @RequestBody @Valid MemberRequest memberRequest) throws Exception{
 
-    Authentication authentication = authMemberService.getAuthentication(memberRequest);
-
-    UserDetails userDetails = authMemberService.loadUserByUsername(authentication.getName());
+    UserDetails userDetails = authMemberService.loadUserByUsername(memberRequest.getUsername());
     return Response.response(userDetails);
   }
 }

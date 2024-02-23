@@ -6,10 +6,12 @@ import com.core.toy3.src.member.model.request.MemberRequest;
 import com.core.toy3.src.member.model.response.MemberResponse;
 import com.core.toy3.src.member.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,13 +22,11 @@ import java.security.Principal;
 import java.util.Optional;
 
 @Service
+@Lazy
 public class AuthMemberService implements UserDetailsService {
 
   @Autowired
   private MemberRepository memberRepository;
-
-  @Autowired
-  private AuthenticationManager authenticationManager;
 
   public UserDetails getMember(){
     Authentication authentication = SecurityContextHolder
@@ -34,20 +34,10 @@ public class AuthMemberService implements UserDetailsService {
             .getAuthentication();
 
     if (authentication.isAuthenticated()){
-      return (UserDetails) authentication.getPrincipal();
+      String username = authentication.getName();
+      return loadUserByUsername(username);
     }
     return null;
-  }
-
-  public Authentication getAuthentication(MemberRequest memberRequest){
-    Authentication authentication = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(
-                    memberRequest.getUsername(),
-                    memberRequest.getPassword())
-    );
-
-    SecurityContextHolder.getContext().setAuthentication(authentication);
-    return authentication;
   }
 
   @Override
