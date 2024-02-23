@@ -15,6 +15,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,12 +28,9 @@ public class MemberController {
 
   @Autowired
   private final MemberService memberService;
+
   @Autowired
-  private final AuthMemberService authMemberService;
-  @Autowired
-  private AuthenticationManager authenticationManager;
-  @Autowired
-  private BCryptPasswordEncoder passwordEncoder;
+  private AuthMemberService authMemberService;
 
   @GetMapping("/")
   public Response<String> testPage(){
@@ -39,8 +38,9 @@ public class MemberController {
   }
 
   @GetMapping("/logged")
-  public Response<String> loggedPage(){
-    return Response.response("login success");
+  public Response<UserDetails> loggedPage(){
+    UserDetails member = authMemberService.getMember();
+    return Response.response(member);
   }
 
   @GetMapping("/error")
@@ -57,18 +57,12 @@ public class MemberController {
 
   // REST API
   @PostMapping("/login")
-  public Response<MemberResponse> login(
+  public Response<UserDetails> login(
           @RequestBody @Valid MemberRequest memberRequest) throws Exception{
-    Authentication authentication = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(
-                    memberRequest.getUsername(),
-                    memberRequest.getPassword())
-    );
 
-    SecurityContextHolder.getContext().setAuthentication(authentication);
+    Authentication authentication = authMemberService.getAuthentication(memberRequest);
 
-    MemberResponse memberResponse = MemberResponse.fromAuthentication(authentication);
-
-    return Response.response(memberResponse);
+    UserDetails userDetails = authMemberService.loadUserByUsername(authentication.getName());
+    return Response.response(userDetails);
   }
 }

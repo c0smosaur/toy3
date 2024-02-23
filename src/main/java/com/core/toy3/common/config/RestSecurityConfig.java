@@ -4,6 +4,7 @@ import com.core.toy3.src.member.entity.AuthMember;
 import com.core.toy3.src.member.filter.CustomAuthenticationFilter;
 import com.core.toy3.src.member.service.AuthMemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,9 +16,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -32,16 +36,31 @@ public class RestSecurityConfig {
   public BCryptPasswordEncoder passwordEncoder(){
     return new BCryptPasswordEncoder();
   }
+  @Autowired
+  public AuthenticationSuccessHandler authenticationSuccessHandler;
+  @Autowired
+  public AuthenticationFailureHandler authenticationFailureHandler;
+  @Autowired
+  private UserDetailsService authMemberService;
 
   @Bean
   public CustomAuthenticationFilter customAuthenticationFilter(
-          final AuthenticationManager authenticationManager) {
-    return new CustomAuthenticationFilter(authenticationManager);
+          final AuthenticationManager authenticationManager,
+          AuthenticationSuccessHandler authenticationSuccessHandler,
+          AuthenticationFailureHandler authenticationFailureHandler) {
+    return new CustomAuthenticationFilter(authenticationManager,
+            authenticationSuccessHandler,
+            authenticationFailureHandler);
   }
 
   @Bean
   public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception{
-    return http.getSharedObject(AuthenticationManagerBuilder.class).build();
+    DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+
+    provider.setPasswordEncoder(passwordEncoder());
+    provider.setUserDetailsService(authMemberService);
+
+    return new ProviderManager(provider);
   }
 
   @Bean
@@ -62,11 +81,13 @@ public class RestSecurityConfig {
                     .requestMatchers(toH2Console()).permitAll() // h2 console 접근 가능
                     .anyRequest().permitAll())
 
-            .formLogin(AbstractHttpConfigurer::disable).
-            httpBasic(AbstractHttpConfigurer::disable)
+            .formLogin(AbstractHttpConfigurer::disable)
+            .httpBasic(AbstractHttpConfigurer::disable)
 
             // 필터 바꿔치기
-            .addFilterAt(this.customAuthenticationFilter(authenticationManager),
+            .addFilterAt(this.customAuthenticationFilter(authenticationManager,
+                    authenticationSuccessHandler,
+                    authenticationFailureHandler),
                     UsernamePasswordAuthenticationFilter.class)
 
             .headers(headers -> headers
