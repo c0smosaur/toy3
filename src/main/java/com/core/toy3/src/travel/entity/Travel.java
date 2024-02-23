@@ -4,10 +4,13 @@ import com.core.toy3.common.constant.State;
 import com.core.toy3.common.entity.BaseEntity;
 import com.core.toy3.src.like.entity.UserLike;
 import com.core.toy3.src.travel.model.request.TravelRequest;
+import com.core.toy3.src.trip.entity.Trip;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,7 +18,7 @@ import java.util.List;
 @ToString(callSuper = true)
 @Builder
 @AllArgsConstructor
-//@Where(clause = "state = 'ACTIVE'") // 조회결과 제외가 아닌 일치하지 않는 데이터 조회시 예외 처리하도록 설정
+@Where(clause = "state = 'ACTIVE'") // 조회결과 제외가 아닌 일치하지 않는 데이터 조회시 예외 처리하도록 설정
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Travel extends BaseEntity {
 
@@ -33,21 +36,20 @@ public class Travel extends BaseEntity {
     private LocalDateTime departureTime;
     private LocalDateTime arrivalTime;
 
-    public Travel(long id, String 대구여행, State state, String 서울, String 대구, LocalDateTime now, LocalDateTime now1, int like) {
-        super();
-    }
+    @Builder.Default
+    @OneToMany(mappedBy = "travel", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    private List<Trip> trip = new ArrayList<>();
 
-    public static Travel fromRequest(TravelRequest travelRequest) {
-        return Travel.builder()
-                .travelName(travelRequest.getTravelName())
-                .state(State.ACTIVE)
-                .departure(travelRequest.getDeparture())
-                .arrival(travelRequest.getArrival())
-                .departureTime(travelRequest.getDepartureTime())
-                .arrivalTime(travelRequest.getArrivalTime())
-                .build();
-
-    }
+//    public static Travel fromRequest(TravelRequest travelRequest) {
+//        return Travel.builder()
+//                .travelName(travelRequest.getTravelName())
+//                .state(State.ACTIVE)
+//                .departure(travelRequest.getDeparture())
+//                .arrival(travelRequest.getArrival())
+//                .departureTime(travelRequest.getDepartureTime())
+//                .arrivalTime(travelRequest.getArrivalTime())
+//                .build();
+//    }
 
     public void update(TravelRequest travelRequest) {
 
