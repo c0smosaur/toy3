@@ -23,21 +23,6 @@ public class TravelController {
     @PostMapping("/create")
     public Response<TravelResponse> createTravel(@RequestBody TravelRequest travelRequest) {
 
-        try{
-            String departureLocation = kakaoMapLocation.getLocation(travelRequest.getDeparture());
-            String arrivalLocation = kakaoMapLocation.getLocation(travelRequest.getArrival());
-
-            if (!departureLocation.isEmpty()){
-                travelRequest.setDeparture(departureLocation);
-            }
-            if (!arrivalLocation.isEmpty()){
-                travelRequest.setArrival(arrivalLocation);
-            }
-
-        } catch (Exception e){
-            throw new CustomException(ResponseStatus.WRONG_ADDRESS);
-        }
-
         return Response.response(travelService.createTravel(travelRequest));
     }
 
