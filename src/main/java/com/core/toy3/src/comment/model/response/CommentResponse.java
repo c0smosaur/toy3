@@ -5,18 +5,22 @@ import lombok.*;
 
 
 @Getter
-//@Builder
+@Builder
 @ToString
-@NoArgsConstructor
+@AllArgsConstructor
 public class CommentResponse {
-    private Integer id;
-    private Integer memberId;
+    private Long id;
+    private Long memberId;
     private Integer travelId;
     private String content;
 
 
-//    public static CommentResponse fromEntity(Comment comment){
-////        return CommentResponse.builder()
-//
-//    }
+    public static CommentResponse fromEntity(Comment comment){
+        return CommentResponse.builder()
+                .id(comment.getId())
+                .memberId(comment.getMember().getId())
+                .content(comment.getContent())
+                .build();
+
+    }
 }

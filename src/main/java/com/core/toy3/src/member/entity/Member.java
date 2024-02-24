@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,24 +18,28 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true)
-@Entity(name="member")
+@Entity(name = "member")
 public class Member extends BaseEntity {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
-  private String username;  // email
-  private String password;
-  private String name;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String username;  // email
+    private String password;
+    private String name;
 
-  //Like 관계 및 여러 개의 좋아요를 가질 수 있음
-  @OneToMany(mappedBy = "member")
-  private final List<UserLike> likes = new ArrayList<>();
+    //Like 관계 및 여러 개의 좋아요를 가질 수 있음
+    @OneToMany(mappedBy = "member")
+    private final List<UserLike> likes = new ArrayList<>();
 
-  @Override
-  public Collection<? extends GrantedAuthority> getAuthorities() {
-    List<GrantedAuthority> authorities = new ArrayList<>();
-    authorities.add(new SimpleGrantedAuthority("USER"));
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("USER"));
 
-    return authorities;
-  }
+        return authorities;
+    }
+
+
 }
+
+

@@ -11,8 +11,8 @@ import lombok.*;
 @Getter
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Comment extends BaseEntity {
+//@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
@@ -30,7 +30,7 @@ public class Comment extends BaseEntity {
     protected Comment() {
     }
 
-    /*private Comment(Member member, Travel travel, String content){
+    private Comment(Member member, Travel travel, String content){
         this.member = member;
         this.travel = travel;
         this.content = content;
@@ -38,15 +38,15 @@ public class Comment extends BaseEntity {
 
     public static Comment of(Member member, Travel travel, String content){
         return new Comment(member, travel, content);
-    }*/
-
-    public static Comment createComment(Member member, Travel travel, String content){
-        return Comment.builder()
-                .member(member)
-                .travel(travel)
-                .content(content)
-                .build();
     }
+
+//    public static Comment createComment(Member member, Travel travel, String content){
+//        return Comment.builder()
+//                .member(member)
+//                .travel(travel)
+//                .content(content)
+//                .build();
+//    }
 
     public void updateComment(CommentRequest request){
         this.content = request.getContent();
