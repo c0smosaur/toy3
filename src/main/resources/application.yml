@@ -34,3 +34,8 @@ spring:
         # 쿼리 포멧팅
         format_sql: true
     open-in-view: false
+
+# kakao map api
+kakao:
+  api-url: https://dapi.kakao.com/v2/local/search/address.json
+  api-key:
