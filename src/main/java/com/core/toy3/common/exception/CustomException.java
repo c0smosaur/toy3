@@ -16,11 +16,10 @@ public class CustomException extends RuntimeException {
         this.message = "";
     }
 
-
     public String getMessage() {
         if(message.isEmpty()) {
             return status.getMessage();
         }
-        return String.format("%s ,detail: %s", status.getMessage(), message);
+        return String.format("%s %n[detail] %n%s", status.getMessage(), message);
     }
 }
