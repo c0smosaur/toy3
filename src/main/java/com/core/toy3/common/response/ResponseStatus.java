@@ -18,6 +18,8 @@ public enum ResponseStatus {
     /**
      * 400 (Bad_Request)
      */
+    COMMENT_NOT_FOUND(false, BAD_REQUEST.value(), "해당 정보를 가진 댓글이 없습니다"),
+    USER_DOES_NOT_EXIST(false, BAD_REQUEST.value(), "사용자 정보가 존재하지 않습니다."),
     TRAVEL_DOES_NOT_EXIST(false, BAD_REQUEST.value(), "해당 여행 목록이 존재하지 않습니다."),
     TRIP_DOES_NOT_EXIST(false, BAD_REQUEST.value(), "해당 여정 목록이 존재하지 않습니다."),
     DELETE_IS_FAIL(false, BAD_REQUEST.value(), "삭제에 실패했습니다."),

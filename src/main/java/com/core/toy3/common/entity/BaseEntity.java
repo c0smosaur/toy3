@@ -8,14 +8,16 @@ import lombok.Getter;
 import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 @Getter
 @ToString
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public class BaseEntity {
+public abstract class BaseEntity {
 
     @CreatedDate
     @Column(updatable = false , columnDefinition = "TIMESTAMP")
@@ -25,4 +27,5 @@ public class BaseEntity {
     @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime updateAt;
 
+    public abstract Collection<? extends GrantedAuthority> getAuthorities();
 }

@@ -8,8 +8,12 @@ import com.core.toy3.src.member.model.response.MemberResponse;
 import com.core.toy3.src.like.entity.UserLike;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -19,8 +23,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true)
-@Entity(name="member")
+@Entity(name = "member")
 public class Member extends BaseEntity {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -40,3 +45,5 @@ public class Member extends BaseEntity {
             .build();
   }
 }
+
+
