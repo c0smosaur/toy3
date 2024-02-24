@@ -1,7 +1,10 @@
 package com.core.toy3.src.comment.model.response;
 
 import com.core.toy3.src.comment.entity.Comment;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.ToString;
 
 
 @Getter
@@ -15,7 +18,7 @@ public class CommentResponse {
     private String content;
 
 
-    public static CommentResponse fromEntity(Comment comment){
+    public static CommentResponse fromEntity(Comment comment) {
         return CommentResponse.builder()
                 .id(comment.getId())
                 .memberId(comment.getMember().getId())

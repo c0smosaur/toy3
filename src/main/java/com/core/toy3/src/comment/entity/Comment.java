@@ -1,7 +1,5 @@
 package com.core.toy3.src.comment.entity;
 
-import com.core.toy3.common.entity.BaseEntity;
-import com.core.toy3.src.comment.model.request.CommentRequest;
 import com.core.toy3.src.member.entity.Member;
 import com.core.toy3.src.travel.entity.Travel;
 import jakarta.persistence.*;
@@ -11,7 +9,7 @@ import lombok.*;
 @Getter
 @Builder
 @AllArgsConstructor
-//@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,17 +25,5 @@ public class Comment {
 
     private String content;
 
-    private Comment(Member member, Travel travel, String content){
-        this.member = member;
-        this.travel = travel;
-        this.content = content;
-    }
 
-    public static Comment of(Member member, Travel travel, String content){
-        return new Comment(member, travel, content);
-    }
-
-    public void updateComment(CommentRequest request){
-        this.content = request.getContent();
-    }
 }
