@@ -27,5 +27,4 @@ public abstract class BaseEntity {
     @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime updateAt;
 
-    public abstract Collection<? extends GrantedAuthority> getAuthorities();
 }

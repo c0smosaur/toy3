@@ -29,16 +29,6 @@ public class AuthMemberService implements UserDetailsService {
   @Autowired
   private MemberRepository memberRepository;
 
-  public UserDetails getMember(){
-    Authentication authentication = SecurityContextHolder
-            .getContext()
-            .getAuthentication();
-
-    // 인증 x면 접근 불가능, authenticated 확인할 필요 x
-      String username = authentication.getName();
-      return loadUserByUsername(username);
-  }
-
   public MemberResponse getMemberResponse(){
     Authentication authentication = SecurityContextHolder
             .getContext()

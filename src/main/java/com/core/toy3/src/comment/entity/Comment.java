@@ -27,9 +27,6 @@ public class Comment {
 
     private String content;
 
-    protected Comment() {
-    }
-
     private Comment(Member member, Travel travel, String content){
         this.member = member;
         this.travel = travel;
@@ -39,14 +36,6 @@ public class Comment {
     public static Comment of(Member member, Travel travel, String content){
         return new Comment(member, travel, content);
     }
-
-//    public static Comment createComment(Member member, Travel travel, String content){
-//        return Comment.builder()
-//                .member(member)
-//                .travel(travel)
-//                .content(content)
-//                .build();
-//    }
 
     public void updateComment(CommentRequest request){
         this.content = request.getContent();

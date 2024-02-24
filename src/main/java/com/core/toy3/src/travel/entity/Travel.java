@@ -2,7 +2,9 @@ package com.core.toy3.src.travel.entity;
 
 import com.core.toy3.common.constant.State;
 import com.core.toy3.common.entity.BaseEntity;
+import com.core.toy3.src.comment.entity.Comment;
 import com.core.toy3.src.like.entity.UserLike;
+import com.core.toy3.src.member.entity.Member;
 import com.core.toy3.src.travel.model.request.TravelRequest;
 import com.core.toy3.src.trip.entity.Trip;
 import jakarta.persistence.*;
@@ -40,6 +42,17 @@ public class Travel extends BaseEntity {
     @OneToMany(mappedBy = "travel", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private List<Trip> trip = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name="member_id")
+    private Member member;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "travel", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    private List<Comment> comment = new ArrayList<>();
+
+    @OneToMany(mappedBy = "travel")
+    private List<UserLike> likes;
+
 //    public static Travel fromRequest(TravelRequest travelRequest) {
 //        return Travel.builder()
 //                .travelName(travelRequest.getTravelName())
@@ -59,9 +72,6 @@ public class Travel extends BaseEntity {
         this.departureTime = travelRequest.getDepartureTime();
         this.arrivalTime = travelRequest.getArrivalTime();
     }
-
-    @OneToMany(mappedBy = "travel")
-    private List<UserLike> likes;
 
     public int getLikeCount() {
         return likes != null ? likes.size() : 0;

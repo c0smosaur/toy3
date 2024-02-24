@@ -51,7 +51,7 @@ public class LikeService {
     @Transactional
     public Response<List<LikeResponse>> getLikedTravelsByMemberId(Long memberId) {
         //memberId에 해당하는 Member를 조회
-        Member member = memberRepository.findById(memberId.intValue())
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("Member not found with ID: " + memberId));
 
         // Member가 좋아요를 누른 목록을 조회
