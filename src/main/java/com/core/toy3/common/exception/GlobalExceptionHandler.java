@@ -1,6 +1,7 @@
 package com.core.toy3.common.exception;
 
 import com.core.toy3.common.response.Response;
+import jakarta.xml.bind.ValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
