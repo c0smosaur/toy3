@@ -1,5 +1,6 @@
 package com.core.toy3.src.member.service;
 
+import com.core.toy3.common.exception.CustomException;
 import com.core.toy3.src.member.entity.AuthMember;
 import com.core.toy3.src.member.entity.Member;
 import com.core.toy3.src.member.model.request.MemberRequest;
@@ -33,11 +34,17 @@ public class AuthMemberService implements UserDetailsService {
             .getContext()
             .getAuthentication();
 
-    if (authentication.isAuthenticated()){
+    // 인증 x면 접근 불가능, authenticated 확인할 필요 x
       String username = authentication.getName();
       return loadUserByUsername(username);
-    }
-    return null;
+  }
+
+  public MemberResponse getMemberResponse(){
+    Authentication authentication = SecurityContextHolder
+            .getContext()
+            .getAuthentication();
+
+    return MemberResponse.fromAuthentication(authentication);
   }
 
   @Override

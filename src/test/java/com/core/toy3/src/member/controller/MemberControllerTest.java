@@ -40,7 +40,6 @@ class MemberControllerTest {
           "5678"
   );
 
-  // 전체 실행시 테스트 순서 랜덤이기 때문에 개별 테스트 진행
   @Test
   public void signUpTest() throws Exception {
     Response<MemberResponse> response = controller.signUp(memberJoinRequest);
@@ -49,24 +48,4 @@ class MemberControllerTest {
             response.getData().getUsername());
   }
 
-//  @Test
-//  public void loginTest() throws Exception {
-//    controller.signUp(memberJoinRequest);
-//
-//    Response<MemberResponse> response = controller.login(memberRequest, session);
-//
-//    assertEquals(response.getData().getUsername(), memberJoinRequest.getUsername());
-//    assertNotNull(session.getAttribute("member"));
-//  }
-
-//  @Test
-//  public void logoutTest() throws Exception {
-//    controller.signUp(memberJoinRequest);
-//
-//    Response<MemberResponse> response = controller.login(memberRequest, session);
-//    Response<String> response1 = controller.logout(session);
-//
-//    assertEquals("Logged out", response1.getData());
-//    assertNull(session.getAttribute("member"));
-//  }
 }

@@ -7,6 +7,7 @@ import com.core.toy3.src.member.model.request.MemberRequest;
 import com.core.toy3.src.member.model.response.MemberResponse;
 import com.core.toy3.src.member.service.AuthMemberService;
 import com.core.toy3.src.member.service.MemberService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,9 +39,8 @@ public class MemberController {
   }
 
   @GetMapping("/logged")
-  public Response<UserDetails> loggedPage(){
-    UserDetails member = authMemberService.getMember();
-    return Response.response(member);
+  public Response<String> loggedPage(){
+    return Response.response("logged in");
   }
 
   @GetMapping("/error")
@@ -55,12 +55,9 @@ public class MemberController {
     return Response.response(data);
   }
 
-  // REST API
-  @PostMapping("/login")
-  public Response<UserDetails> login(
-          @RequestBody @Valid MemberRequest memberRequest) throws Exception{
-
-    UserDetails userDetails = authMemberService.loadUserByUsername(memberRequest.getUsername());
-    return Response.response(userDetails);
+  @GetMapping("/member")
+  public Response<MemberResponse> memberDetails() throws Exception{
+    MemberResponse member = authMemberService.getMemberResponse();
+    return Response.response(member);
   }
 }

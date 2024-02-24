@@ -20,7 +20,7 @@ public class AuthMember extends User {
             member.getPassword(),
             getAuthorities(member));
     this.id = member.getId();
-//    this.member = member;
+    this.member = member;
   }
 
   private static Collection<GrantedAuthority> getAuthorities(Member member){

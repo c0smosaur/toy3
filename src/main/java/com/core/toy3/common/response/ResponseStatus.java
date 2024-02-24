@@ -16,6 +16,7 @@ public enum ResponseStatus {
     EMAIL_VALIDATION_ERROR(false, BAD_REQUEST.value(), "잘못된 형식의 이메일입니다.");
 
 
+
     private final boolean isSuccess;
     private final int statusCode;
     private final String message;
