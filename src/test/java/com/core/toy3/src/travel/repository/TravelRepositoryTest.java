@@ -22,7 +22,7 @@ class TravelRepositoryTest {
     void saveTravel() {
 
         // given
-        Travel travel = new Travel(1L, "대구여행", State.ACTIVE, "서울", "대구", LocalDateTime.now(), LocalDateTime.now());
+        Travel travel = new Travel(1L, "대구여행", State.ACTIVE, "서울", "대구", LocalDateTime.now(), LocalDateTime.now(),4);
 
         // when
         Travel savedTravel = travelRepository.save(travel);
@@ -36,16 +36,16 @@ class TravelRepositoryTest {
     void isTravelDataActive() {
 
         // given
-        Travel travelData1 = new Travel(1L, "대구여행", State.DELETE, "서울", "대구", LocalDateTime.now(), LocalDateTime.now());
-        Travel travelData2 = new Travel(1L, "대구여행", State.ACTIVE, "서울", "대구", LocalDateTime.now(), LocalDateTime.now());
-        Travel travelData3 = new Travel(1L, "대구여행", State.ACTIVE, "서울", "대구", LocalDateTime.now(), LocalDateTime.now());
+        Travel travelData1 = new Travel(1L, "대구여행", State.DELETE, "서울", "대구", LocalDateTime.now(), LocalDateTime.now(), 4);
+        Travel travelData2 = new Travel(1L, "대구여행", State.ACTIVE, "서울", "대구", LocalDateTime.now(), LocalDateTime.now(),4);
+        Travel travelData3 = new Travel(1L, "대구여행", State.ACTIVE, "서울", "대구", LocalDateTime.now(), LocalDateTime.now(),4);
 
         travelRepository.save(travelData1);
         travelRepository.save(travelData2);
         travelRepository.save(travelData3);
 
         // when
-        List<Travel> travelActive = travelRepository.getAllTravelActive(State.ACTIVE);
+        List<Travel> travelActive = travelRepository.getAllTravelActive();
 
         // then
         Assertions.assertThat(travelActive)

@@ -20,15 +20,17 @@ spring:
     console:
       enabled: true
   datasource:
+#    driver-class: org.h2.Driver
+#    database-platform: org.hibernate.dialect.H2Dialect
     hikari:
-      jdbc-url: jdbc:h2:mem:testdb
+      jdbc-url: jdbc:h2:mem:testdb;DB_CLOSE_ON_EXIT=FALSE
   jpa:
     # sql 쿼리 콘솔 출력 허용
     show_sql: true
     properties:
       hibernate:
-        # SQL 쿼리에 주석을 추가하여 해당 쿼리가 어떤 Hibernate 쿼리에 해당하는지 식별
-        use_sql_comments: true
+#        # SQL 쿼리에 주석을 추가하여 해당 쿼리가 어떤 Hibernate 쿼리에 해당하는지 식별
+        use_sql_comments: false
         # 쿼리 포멧팅
         format_sql: true
     open-in-view: false

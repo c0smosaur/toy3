@@ -17,9 +17,30 @@ public interface TravelRepository extends JpaRepository<Travel, Long> {
     @Query("""
             select tv
             from Travel tv
-            where tv.state = 'ACTIVE'
+            left join fetch tv.trip t
+            where (t is null or t.state = 'ACTIVE')
+            order by tv.id asc, t.postedAt asc
             """)
     List<Travel> getAllTravelActive();
+
+    @Query("""
+            select tv
+            from Travel tv
+            left join fetch tv.trip t
+            where tv.id = :travel_id
+            and tv.state = 'ACTIVE'
+            and (t is null or t.state = 'ACTIVE')
+            """)
+    Optional<Travel> getTravelActive(@Param("travel_id") Long id);
+
+    @Query("""
+            update Travel tv
+            set tv.state = 'DELETE'
+            where tv.id = :travel_id
+            and tv.state = 'ACTIVE'
+            """)
+    @Modifying
+    Optional<Integer> deleteTravelById(@Param("travel_id") Long id);
 
     @Query("""
             select tv
@@ -27,14 +48,6 @@ public interface TravelRepository extends JpaRepository<Travel, Long> {
             where tv.id = :travel_id
             and tv.state = 'ACTIVE'
             """)
-    Optional<Travel> getTravelActive(@Param("travel_id") Long id);
-
-    @Modifying
-    @Query("""
-            update Travel tv
-            set tv.state = 'DELETE'
-            where tv.id = :travel_id
-            and tv.state = 'ACTIVE'
-            """)
-    Optional<Integer> deleteTravelById(@Param("travel_id") Long id);
+    Optional<Travel> findTravel(@Param("travel_id") Long id);
 }
+

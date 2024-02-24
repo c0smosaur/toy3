@@ -45,7 +45,7 @@ public class TravelController {
             @PathVariable("travelId") long id,
             @RequestBody TravelRequest travelRequest) {
 
-            return Response.response(travelService.updateTravel(id, travelRequest));
+        return Response.response(travelService.updateTravel(id, travelRequest));
     }
 
     @DeleteMapping("/delete-travel/{travelId}")

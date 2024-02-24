@@ -9,7 +9,7 @@ import static com.core.toy3.common.response.ResponseStatus.*;
 
 @Getter
 @AllArgsConstructor
-@JsonPropertyOrder({"isSuccess", "statusCode", "message", "data"})
+@JsonPropertyOrder({"isSuccess", "statusCode", "message", "status", "data"})
 public class Response<T> {
 
     private Boolean isSuccess;

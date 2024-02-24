@@ -1,14 +1,17 @@
 package com.core.toy3.src.member.entity;
 
 import com.core.toy3.common.entity.BaseEntity;
+
+import com.core.toy3.src.member.model.request.MemberJoinRequest;
 import com.core.toy3.src.member.model.response.MemberResponse;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+
+import com.core.toy3.src.like.entity.UserLike;
+import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Getter
 @Setter
@@ -24,4 +27,16 @@ public class Member extends BaseEntity {
   private String username;  // email
   private String password;
   private String name;
+  
+    //Like 관계 및 여러 개의 좋아요를 가질 수 있음
+  @OneToMany(mappedBy = "member")
+  private final List<UserLike> likes = new ArrayList<>();
+
+  public static Member fromJoinRequest(MemberJoinRequest memberJoinRequest){
+    return Member.builder()
+            .username(memberJoinRequest.getUsername())
+            .password(memberJoinRequest.getPassword())
+            .name(memberJoinRequest.getName())
+            .build();
+  }
 }
