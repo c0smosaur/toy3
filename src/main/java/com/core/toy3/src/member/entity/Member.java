@@ -29,15 +29,12 @@ public class Member extends BaseEntity {
   private String name;
 
   // 한 멤버는 여러 개의 여행을 가질 수 있음
-  @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "member", fetch = FetchType.EAGER)
   private final List<Travel> travel = new ArrayList<>();
 
   //Like 관계 및 여러 개의 좋아요를 가질 수 있음
-  @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "member", fetch = FetchType.EAGER)
   private final List<UserLike> like = new ArrayList<>();
-
-  @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
-  private final List<Comment> comment = new ArrayList<>();
 
   public static Member fromJoinRequest(MemberJoinRequest memberJoinRequest){
     return Member.builder()

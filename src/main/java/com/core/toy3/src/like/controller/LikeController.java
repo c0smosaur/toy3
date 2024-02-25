@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/likes")
+@RequestMapping("/api/likes")
 public class LikeController {
 
     private final LikeService likeService;
@@ -23,7 +23,7 @@ public class LikeController {
     }
 
     // 좋아요 추가 또는 취소
-    @PostMapping
+    @PostMapping("/like-manager")
     public Response<LikeResponse> createAndCancelLike(@AuthenticationPrincipal AuthMember member,
                                                       @RequestBody LikeRequest likeRequest) {
         likeRequest.setMemberId(member.getMember().getId());
