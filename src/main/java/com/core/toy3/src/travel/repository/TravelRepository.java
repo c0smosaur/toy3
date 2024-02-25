@@ -54,7 +54,7 @@ public interface TravelRepository extends JpaRepository<Travel, Long> {
             from Travel tv
             left join fetch tv.trip t
             where (t is null or t.state = 'ACTIVE')
-            and trim(tv.travelName) like concat('%',:keyword, '%')
+            and trim(tv.travelName) like concat('%',trim(:keyword), '%')
             order by tv.id asc, t.postedAt asc
             """)
     List<Travel> getTravelSearchByTravelName(@Param("keyword") String keyword);
@@ -64,10 +64,9 @@ public interface TravelRepository extends JpaRepository<Travel, Long> {
             from Travel tv
             left join fetch tv.trip t
             where (t is null or t.state = 'ACTIVE')
-            and trim(tv.departure) like concat('%',:keyword, '%')
+            and trim(tv.departure) like concat('%',trim(:keyword), '%')
             order by tv.id asc, t.postedAt asc
             """)
-
     List<Travel> getTravelSearchByDeparture(@Param("keyword") String keyword);
 
     @Query("""
@@ -75,7 +74,7 @@ public interface TravelRepository extends JpaRepository<Travel, Long> {
             from Travel tv
             left join fetch tv.trip t
             where (t is null or t.state = 'ACTIVE')
-            and trim(tv.arrival) like concat('%',:keyword, '%')
+            and trim(tv.arrival) like concat('%',trim(:keyword), '%')
             order by tv.id asc, t.postedAt asc
             """)
     List<Travel> getTravelSearchByArrival(@Param("keyword") String keyword);

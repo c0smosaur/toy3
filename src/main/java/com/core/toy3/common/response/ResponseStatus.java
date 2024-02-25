@@ -2,8 +2,11 @@ package com.core.toy3.common.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
+import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.OK;
 
 @Getter
@@ -31,11 +34,12 @@ public enum ResponseStatus {
     POSTAT_IS_INCORRECT(false, BAD_REQUEST.value(), "여정 시간이 잘못 설정되었습니다."),
     DUPLICATE_USERNAME(false, BAD_REQUEST.value(),"이미 등록된 이메일입니다."),
     EMAIL_VALIDATION_ERROR(false, BAD_REQUEST.value(), "잘못된 형식의 이메일입니다."),
-    HAS_NOT_PERMISSION_TO_ACCESS(false, BAD_REQUEST.value(), "허가할 수 없는 접근입니다.");
-  
+    HAS_NOT_PERMISSION_TO_ACCESS(false, BAD_REQUEST.value(), "허가할 수 없는 접근입니다."),
+
     /**
      * 500(Invalid_Error)
      */
+    INTERNAL_SERVER_ERROR(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "예상치 못한 오류가 발생했습니다.");
 
   
     private final boolean isSuccess;

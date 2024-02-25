@@ -20,7 +20,6 @@ import java.util.List;
 @ToString(callSuper = true)
 @Builder
 @AllArgsConstructor
-@Where(clause = "state = 'ACTIVE'") // 조회결과 제외가 아닌 일치하지 않는 데이터 조회시 예외 처리하도록 설정
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Travel extends BaseEntity {
 
@@ -39,7 +38,7 @@ public class Travel extends BaseEntity {
     private LocalDateTime arrivalTime;
 
     @Builder.Default
-    @OneToMany(mappedBy = "travel", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "travel", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Trip> trip = new ArrayList<>();
 
     @ManyToOne
@@ -47,7 +46,7 @@ public class Travel extends BaseEntity {
     private Member member;
 
     @Builder.Default
-    @OneToMany(mappedBy = "travel", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "travel", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Comment> comment = new ArrayList<>();
 
     @Builder.Default

@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import static com.core.toy3.common.response.ResponseStatus.*;
 
@@ -158,7 +159,7 @@ public class TravelService {
 
     // 게시물의 주인이 다른 경우 예외 발생(수정, 삭제)
     private void validateMatches(AuthMember member, Travel travel) {
-        if(travel.getMember().getId() != member.getId()) {
+        if(!Objects.equals(travel.getMember().getId(), member.getId())) {
             throw new CustomException(HAS_NOT_PERMISSION_TO_ACCESS);
         }
     }

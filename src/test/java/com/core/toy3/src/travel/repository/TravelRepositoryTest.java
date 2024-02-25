@@ -1,6 +1,7 @@
 package com.core.toy3.src.travel.repository;
 
 import com.core.toy3.common.constant.State;
+import com.core.toy3.src.member.entity.Member;
 import com.core.toy3.src.travel.entity.Travel;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @DataJpaTest
@@ -22,7 +24,7 @@ class TravelRepositoryTest {
     void saveTravel() {
 
         // given
-        Travel travel = new Travel(1L, "대구여행", State.ACTIVE, "서울", "대구", LocalDateTime.now(), LocalDateTime.now(),4);
+        Travel travel = new Travel(1L, "대구여행", State.ACTIVE, "서울", "대구", LocalDateTime.now(), LocalDateTime.now(), new ArrayList<>(), new Member(), new ArrayList<>(), new ArrayList<>());
 
         // when
         Travel savedTravel = travelRepository.save(travel);
@@ -36,9 +38,9 @@ class TravelRepositoryTest {
     void isTravelDataActive() {
 
         // given
-        Travel travelData1 = new Travel(1L, "대구여행", State.DELETE, "서울", "대구", LocalDateTime.now(), LocalDateTime.now(), 4);
-        Travel travelData2 = new Travel(1L, "대구여행", State.ACTIVE, "서울", "대구", LocalDateTime.now(), LocalDateTime.now(),4);
-        Travel travelData3 = new Travel(1L, "대구여행", State.ACTIVE, "서울", "대구", LocalDateTime.now(), LocalDateTime.now(),4);
+        Travel travelData1 = new Travel(1L, "대구여행1", State.ACTIVE, "서울", "대구", LocalDateTime.now(), LocalDateTime.now(), new ArrayList<>(), new Member(), new ArrayList<>(), new ArrayList<>());
+        Travel travelData2 = new Travel(2L, "대구여행2", State.ACTIVE, "서울", "대구", LocalDateTime.now(), LocalDateTime.now(), new ArrayList<>(), new Member(), new ArrayList<>(), new ArrayList<>());
+        Travel travelData3 = new Travel(3L, "대구여행3", State.ACTIVE, "서울", "대구", LocalDateTime.now(), LocalDateTime.now(), new ArrayList<>(), new Member(), new ArrayList<>(), new ArrayList<>());
 
         travelRepository.save(travelData1);
         travelRepository.save(travelData2);
@@ -49,7 +51,7 @@ class TravelRepositoryTest {
 
         // then
         Assertions.assertThat(travelActive)
-                .allMatch(travel -> travel.getState() == State.ACTIVE)
-                .isEmpty();
+                .isNotEmpty() // travelActive 리스트가 비어 있지 않음을 확인
+                .allMatch(travel -> travel.getState() == State.ACTIVE);
     }
 }
