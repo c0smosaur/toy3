@@ -1,9 +1,11 @@
 package com.core.toy3.src.trip.service;
 
+import com.core.toy3.common.KakaoMapLocation;
 import com.core.toy3.common.constant.State;
 import com.core.toy3.common.exception.CustomException;
 import com.core.toy3.src.member.entity.AuthMember;
 import com.core.toy3.src.travel.entity.Travel;
+import com.core.toy3.src.travel.model.request.TravelRequest;
 import com.core.toy3.src.travel.repository.TravelRepository;
 import com.core.toy3.src.trip.entity.Trip;
 import com.core.toy3.src.trip.model.request.TripRequest;
@@ -26,6 +28,7 @@ public class TripService {
 
     private final TravelRepository travelRepository;
     private final TripRepository tripRepository;
+    private final KakaoMapLocation kakaoMapLocation;
 
     @Transactional
     public TripResponse createTrip(Long travelId, TripRequest tripRequest, AuthMember member) {
@@ -33,6 +36,11 @@ public class TripService {
         Travel travel = getExistTravel(travelId);
         validateLimitedAccess(travel); // 이미 삭제된 상위 엔티티에 대해서는 접근 제한
         validateMatches(member, travel); // 사용자 자신의 travel에만 trip을 추가할 수 있어야함
+
+        // 입력받은 주소 kakao 주소로 받아옴
+        tripRequest.setLocation(
+                setTripLocationWithKakao(tripRequest.getLocation())
+        );
 
         Trip trip = fromRequestToTripEntity(travel, tripRequest);
 
@@ -70,6 +78,11 @@ public class TripService {
 
         Travel travel = getExistTravel(travelId);
         validateLimitedAccess(travel);
+
+        // 입력받은 주소 kakao 주소로 받아옴
+        tripRequest.setLocation(
+                setTripLocationWithKakao(tripRequest.getLocation())
+        );
 
         Trip trip = getExistTrip(travelId, tripId);
 
@@ -140,6 +153,15 @@ public class TripService {
                     | 삭제 상태인 여행 게시물에
                     | 여정 정보를 등록, 수정 및 삭제할 수 없습니다.
                     """);
+        }
+    }
+
+    private String setTripLocationWithKakao(String location){
+        String kakaoLocation = kakaoMapLocation.getLocation(location);
+        if (kakaoLocation!=null){
+            return kakaoLocation;
+        } else {
+            return location;
         }
     }
 

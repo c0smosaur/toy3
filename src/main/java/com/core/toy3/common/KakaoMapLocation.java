@@ -31,7 +31,7 @@ public class KakaoMapLocation {
     private List<String> documents;
   }
 
-  public String getLocation(String address) throws Exception{
+  public String getLocation(String address) {
     RestTemplate restTemplate = new RestTemplate();
 
     // 헤더 작성
@@ -47,34 +47,44 @@ public class KakaoMapLocation {
             String.class);
 
     ObjectMapper objectMapper = new ObjectMapper();
-    Map jsonMap = objectMapper.readValue(result.getBody(), Map.class);
+    try{
+      Map jsonMap = objectMapper.readValue(result.getBody(), Map.class);
 
-    // 첫번째 검색 결과 가져옴
-    Map firstResult = (Map)((List) jsonMap.get("documents")).get(0);
-    String addressType = (String) firstResult.get("address_type");
+      // 첫번째 검색 결과 가져옴
+      Map firstResult = (Map)((List) jsonMap.get("documents")).get(0);
+      String addressType = (String) firstResult.get("address_type");
 
-    String resultAddress = "";
+      String resultAddress = "";
 
-    switch (addressType){
-      case "ROAD_ADDR":
-        String roadAddressName = (String) ((Map) firstResult.get("road_address")).get("address_name");
-        String buildingName = (String) ((Map) firstResult.get("road_address")).get("building_name");
+      switch (addressType){
+        case "ROAD_ADDR":
+          String roadAddressName = (String) ((Map) firstResult.get("road_address")).get("address_name");
+          String buildingName = (String) ((Map) firstResult.get("road_address")).get("building_name");
 
-        resultAddress = roadAddressName + " " + buildingName;
-        break;
+          resultAddress = roadAddressName + " " + buildingName;
+          break;
 
-      case "ROAD":
-        roadAddressName = (String) ((Map) firstResult.get("road_address")).get("address_name");
+        case "ROAD":
+          roadAddressName = (String) ((Map) firstResult.get("road_address")).get("address_name");
 
-        resultAddress = roadAddressName;
-        break;
+          resultAddress = roadAddressName;
+          break;
 
         // REGION, REGION_ADDR
-      default:
-        String regionAddressName = (String) ((Map) firstResult.get("address")).get("address_name");
-        regionAddressName = regionAddressName;
-        break;
+        default:
+          String regionAddressName = (String) ((Map) firstResult.get("address")).get("address_name");
+          resultAddress = regionAddressName;
+          break;
+      }
+
+      if (resultAddress.isEmpty()){
+        return null;
+      } else {
+        return resultAddress;
+      }
+    } catch (Exception e){
+      return null;
     }
-    return resultAddress;
+
   }
 }

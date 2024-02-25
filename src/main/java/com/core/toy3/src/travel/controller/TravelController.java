@@ -31,7 +31,7 @@ public class TravelController {
     @GetMapping("/read")// 1
     public Response<List<TravelResponse>> getAllTravel() {
 
-        List<TravelResponse> travelResponseList = travelService.getAllravel();
+        List<TravelResponse> travelResponseList = travelService.getAllTravel();
 
         return Response.response(travelResponseList);
     }
@@ -48,7 +48,7 @@ public class TravelController {
             @RequestParam(value = "departure", required = false) String departure,
             @RequestParam(value = "arrival", required = false) String arrival) {
 
-        List<TravelResponse> travelSearchList = travelService.getAllravel(); // 검색 안할경우 전체 리스트 출력
+        List<TravelResponse> travelSearchList = travelService.getAllTravel(); // 검색 안할경우 전체 리스트 출력
 
         if (travelName != null && !travelName.trim().isEmpty()) {
             System.out.println("travelName = " + travelName);

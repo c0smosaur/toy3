@@ -1,5 +1,6 @@
 package com.core.toy3.src.travel.service;
 
+import com.core.toy3.common.KakaoMapLocation;
 import com.core.toy3.common.constant.State;
 import com.core.toy3.common.exception.CustomException;
 import com.core.toy3.common.response.Response;
@@ -8,6 +9,7 @@ import com.core.toy3.src.travel.entity.Travel;
 import com.core.toy3.src.travel.model.request.TravelRequest;
 import com.core.toy3.src.travel.model.response.TravelResponse;
 import com.core.toy3.src.travel.repository.TravelRepository;
+import com.core.toy3.src.trip.model.request.TripRequest;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -24,10 +26,13 @@ import static com.core.toy3.common.response.ResponseStatus.*;
 public class TravelService {
 
     private final TravelRepository travelRepository;
+    private final KakaoMapLocation kakaoMapLocation;
 
     @Transactional
     public TravelResponse createTravel(TravelRequest travelRequest,
                                        AuthMember member) {
+
+        travelRequest = setRequestLocationWithKakao(travelRequest);
 
         Travel travel = getTravelFromRequest(travelRequest, member);
 
@@ -67,7 +72,7 @@ public class TravelService {
 //    }
 
     @Transactional
-    public List<TravelResponse> getAllravel() {
+    public List<TravelResponse> getAllTravel() {
 
         // state가 ACTIVE인 데이터만 조회
         List<Travel> travelActive = travelRepository.getAllTravelActive();
@@ -124,6 +129,7 @@ public class TravelService {
         Travel travel = travelRepository.getTravelActive(id)
                 .orElseThrow(() -> new CustomException(TRAVEL_DOES_NOT_EXIST));
 
+        travelRequest = setRequestLocationWithKakao(travelRequest);
         validateMatches(member, travel);
 
         travel.update(travelRequest);
@@ -165,4 +171,22 @@ public class TravelService {
         return TravelResponse.toResult(travel);
     }
 
+    private TravelRequest setRequestLocationWithKakao(TravelRequest travelRequest){
+        // departure 주소 받아오기
+        String departureLocation = kakaoMapLocation.getLocation(
+                travelRequest.getDeparture()
+        );
+        if (departureLocation!=null){
+            travelRequest.setDeparture(departureLocation);
+        }
+
+        // arrival 주소 받아오기
+        String arrivalLocation = kakaoMapLocation.getLocation(
+                travelRequest.getArrival()
+        );
+        if (arrivalLocation!=null){
+            travelRequest.setArrival(arrivalLocation);
+        }
+        return travelRequest;
+    }
 }
