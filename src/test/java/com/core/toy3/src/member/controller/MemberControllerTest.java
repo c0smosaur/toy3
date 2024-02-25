@@ -1,5 +1,6 @@
 package com.core.toy3.src.member.controller;
 
+import com.core.toy3.common.exception.CustomException;
 import com.core.toy3.common.response.Response;
 import com.core.toy3.src.member.model.request.MemberJoinRequest;
 import com.core.toy3.src.member.model.request.MemberRequest;
@@ -21,12 +22,6 @@ class MemberControllerTest {
 
   @Autowired
   private MemberController controller;
-  @Autowired
-  private MemberService service;
-  @Autowired
-  private AuthMemberService authMemberService;
-  @Autowired
-  private final HttpSession session = new MockHttpSession();
 
   // 임의의 member request
   MemberJoinRequest memberJoinRequest = new MemberJoinRequest(
@@ -46,6 +41,9 @@ class MemberControllerTest {
 
     assertEquals(memberJoinRequest.getUsername(),
             response.getData().getUsername());
+
+    assertThrows(CustomException.class,
+            () -> controller.signUp(memberJoinRequest));
   }
 
 }
