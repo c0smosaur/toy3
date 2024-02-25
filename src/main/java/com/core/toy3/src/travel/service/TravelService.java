@@ -3,6 +3,7 @@ package com.core.toy3.src.travel.service;
 import com.core.toy3.common.constant.State;
 import com.core.toy3.common.exception.CustomException;
 import com.core.toy3.common.response.Response;
+import com.core.toy3.src.member.entity.AuthMember;
 import com.core.toy3.src.travel.entity.Travel;
 import com.core.toy3.src.travel.model.request.TravelRequest;
 import com.core.toy3.src.travel.model.response.TravelResponse;
@@ -28,14 +29,15 @@ public class TravelService {
     private final TravelRepository travelRepository;
 
     @Transactional
-    public TravelResponse createTravel(TravelRequest travelRequest) {
+    public TravelResponse createTravel(TravelRequest travelRequest,
+                                       AuthMember member) {
 
-        Travel travel = getTravelFromRequest(travelRequest);
+        Travel travel = getTravelFromRequest(travelRequest, member);
 
         return TravelResponse.toResult(travelRepository.save(travel));
     }
 
-    private Travel getTravelFromRequest(TravelRequest travelRequest) {
+    private Travel getTravelFromRequest(TravelRequest travelRequest, AuthMember member) {
 
         validateTravelDepartureTime(travelRequest);
 
@@ -46,6 +48,7 @@ public class TravelService {
                 .arrival(travelRequest.getArrival())
                 .departureTime(travelRequest.getDepartureTime())
                 .arrivalTime(travelRequest.getArrivalTime())
+                .member(member.getMember())
                 .build();
     }
 
@@ -60,8 +63,15 @@ public class TravelService {
         }
     }
 
+//    private void validateUserInfo(AuthMember member) {
+//        if(member == null) {
+//            throw new CustomException(USERINFO_IS_NOTFOUND);
+//        }
+//    }
+
     @Transactional
     public List<TravelResponse> getAllravel() {
+
         // state가 ACTIVE인 데이터만 조회
         List<Travel> travelActive = travelRepository.getAllTravelActive();
 
@@ -81,10 +91,12 @@ public class TravelService {
     }
 
     @Transactional
-    public TravelResponse updateTravel(long id, TravelRequest travelRequest) {
+    public TravelResponse updateTravel(long id, TravelRequest travelRequest, AuthMember member) {
 
         Travel travel = travelRepository.getTravelActive(id)
                 .orElseThrow(() -> new CustomException(TRAVEL_DOES_NOT_EXIST));
+
+        validateMatches(member, travel);
 
         travel.update(travelRequest);
 
@@ -92,16 +104,28 @@ public class TravelService {
     }
 
     @Transactional
-    public Integer deleteTravel(Long id) {
+    public Integer deleteTravel(Long id, AuthMember member) {
+
+        Travel travel = travelRepository.getTravelActive(id)
+                .orElseThrow(() -> new CustomException(TRAVEL_DOES_NOT_EXIST));
+
+        validateMatches(member, travel);
 
         return travelRepository.deleteTravelById(id)
                 .filter(result -> result == 1) // 1이 return 될 경우 삭제완료
                 .orElseThrow(() -> new CustomException(DELETE_IS_FAIL));
 
     }
+
     public Response<TravelResponse> getTravelDetails(Long id) {
         return travelRepository.findById(id)
                 .map(travel -> Response.response(new TravelResponse(travel.getLikeCount())))
                 .orElse(null);
+    }
+
+    private void validateMatches(AuthMember member, Travel travel) {
+        if(travel.getMember().getId() != member.getId()) {
+            throw new CustomException(HAS_NOT_PERMISSION_TO_ACCESS);
+        }
     }
 }

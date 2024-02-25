@@ -10,6 +10,7 @@ import lombok.*;
 @Entity
 @Getter
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 //@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment {

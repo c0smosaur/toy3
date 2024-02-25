@@ -46,7 +46,6 @@ public interface TravelRepository extends JpaRepository<Travel, Long> {
             select tv
             from Travel tv
             where tv.id = :travel_id
-            and tv.state = 'ACTIVE'
             """)
     Optional<Travel> findTravel(@Param("travel_id") Long id);
 }
