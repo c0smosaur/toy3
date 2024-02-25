@@ -1,9 +1,6 @@
 package com.core.toy3.src.trip.model.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -15,4 +12,8 @@ public class TripUpdateRequest {
 
     private String location;
     private LocalDateTime postedAt;
+
+    public void setLocation(String location){
+        this.location = location;
+    }
 }
