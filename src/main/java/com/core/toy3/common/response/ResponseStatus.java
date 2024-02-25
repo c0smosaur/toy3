@@ -26,10 +26,12 @@ public enum ResponseStatus {
     ARRIVALTIME_IS_INCORRECT(false, BAD_REQUEST.value() , "도착 시간이 잘못 설정되었습니다."),
 
     WRONG_ADDRESS(false, BAD_REQUEST.value(), "검색된 주소 결과가 없습니다."),
+    USERINFO_IS_NOTFOUND(false, BAD_REQUEST.value(), "유저정보를 찾을 수 없습니다."),
 
     POSTAT_IS_INCORRECT(false, BAD_REQUEST.value(), "여정 시간이 잘못 설정되었습니다."),
     DUPLICATE_USERNAME(false, BAD_REQUEST.value(),"이미 등록된 이메일입니다."),
-    EMAIL_VALIDATION_ERROR(false, BAD_REQUEST.value(), "잘못된 형식의 이메일입니다.");
+    EMAIL_VALIDATION_ERROR(false, BAD_REQUEST.value(), "잘못된 형식의 이메일입니다."),
+    HAS_NOT_PERMISSION_TO_ACCESS(false, BAD_REQUEST.value(), "허가할 수 없는 접근입니다.");
   
     /**
      * 500(Invalid_Error)

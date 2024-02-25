@@ -1,6 +1,8 @@
 package com.core.toy3.src.trip.service;
 
+import com.core.toy3.common.constant.State;
 import com.core.toy3.common.exception.CustomException;
+import com.core.toy3.src.member.entity.AuthMember;
 import com.core.toy3.src.travel.entity.Travel;
 import com.core.toy3.src.travel.repository.TravelRepository;
 import com.core.toy3.src.trip.entity.Trip;
@@ -26,16 +28,81 @@ public class TripService {
     private final TripRepository tripRepository;
 
     @Transactional
-    public TripResponse createTrip(Long id, TripRequest tripRequest) {
+    public TripResponse createTrip(Long travelId, TripRequest tripRequest, AuthMember member) {
 
-        Travel travel = travelRepository.findTravel(id)
-                .orElseThrow(() -> new CustomException(TRIP_DOES_NOT_EXIST));
+        Travel travel = getExistTravel(travelId);
+        validateLimitedAccess(travel); // 이미 삭제된 상위 엔티티에 대해서는 접근 제한
+        validateMatches(member, travel); // 사용자 자신의 travel에만 trip을 추가할 수 있어야함
 
         Trip trip = fromRequestToTripEntity(travel, tripRequest);
 
         validPostedAt(travel, trip);
 
         return TripResponse.toResult(tripRepository.save(trip));
+    }
+
+    @Transactional
+    public List<TripResponse> getAllTripFromTravel(Long travelId) {
+
+        Travel travel = getExistTravel(travelId);
+        validateLimitedAccess(travel);// 이미 삭제된 상위 엔티티에 대해서는 접근 제한
+
+        List<Trip> tripActive = tripRepository.getAllTripActiveFromTravel(travelId); // 선택한 여행의 모든 여정만 조회
+
+        return tripActive.stream()
+                .map(TripResponse::toResult)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public TripResponse getTrip(Long travelId, Long tripId) {
+
+        Travel travel = getExistTravel(travelId);
+        validateLimitedAccess(travel);
+
+        Trip trip = getExistTrip(travelId, tripId);
+
+        return TripResponse.toResult(trip);
+    }
+
+    @Transactional
+    public TripResponse updateTrip(Long tripId, Long travelId, TripUpdateRequest tripRequest, AuthMember member) {
+
+        Travel travel = getExistTravel(travelId);
+        validateLimitedAccess(travel);
+
+        Trip trip = getExistTrip(travelId, tripId);
+
+        validateMatches(member, travel);
+
+        trip.update(tripRequest);
+
+        validPostedAt(travel, trip); // update이후 시점에 여정 시간과 여행 시간이 논리적으로 맞는지 검증
+
+        return TripResponse.toResult(trip);
+    }
+
+    @Transactional
+    public Integer deleteTrip(Long tripId, Long travelId, AuthMember member) {
+
+        Travel travel = getExistTravel(travelId);
+        validateLimitedAccess(travel);
+        validateMatches(member, travel);
+
+        return tripRepository.deleteTripById(tripId) // 더티체킹 없이 JPQL로 바로 변환
+                .filter(result -> result == 1)
+                .orElseThrow(() -> new CustomException(DELETE_IS_FAIL));
+
+    }
+
+    private Travel getExistTravel(Long travelId) {
+        return travelRepository.findTravel(travelId)
+                .orElseThrow(() -> new CustomException(TRIP_DOES_NOT_EXIST));
+    }
+
+    private Trip getExistTrip(Long travelId, Long tripId) {
+        return tripRepository.getTripById(travelId, tripId)
+                .orElseThrow(() -> new CustomException(TRIP_DOES_NOT_EXIST));
     }
 
     private Trip fromRequestToTripEntity(Travel travel, TripRequest tripRequest) {
@@ -46,6 +113,12 @@ public class TripService {
                 .postedAt(tripRequest.getPostedAt())
                 .travel(travel)
                 .build();
+    }
+
+    private void validateMatches(AuthMember member, Travel travel) {
+        if(travel.getMember().getId() != member.getId()) {
+            throw new CustomException(HAS_NOT_PERMISSION_TO_ACCESS);
+        }
     }
 
     private void validPostedAt(Travel travel, Trip trip) {
@@ -61,46 +134,13 @@ public class TripService {
         }
     }
 
-    @Transactional
-    public List<TripResponse> getAllTrip() {
-
-        List<Trip> tripActive = tripRepository.getAllTripActive();
-
-        return tripActive.stream()
-                .map(TripResponse::toResult)
-                .collect(Collectors.toList());
+    private void validateLimitedAccess(Travel travel) {
+        if(travel.getState() == State.DELETE) {
+            throw new CustomException(HAS_NOT_PERMISSION_TO_ACCESS,"""
+                    | 삭제 상태인 여행 게시물에
+                    | 여정 정보를 등록, 수정 및 삭제할 수 없습니다.
+                    """);
+        }
     }
 
-    @Transactional
-    public TripResponse getTrip(Long id) {
-
-        Trip trip = tripRepository.getTripById(id)
-                .orElseThrow(() -> new CustomException(TRIP_DOES_NOT_EXIST));
-
-        return TripResponse.toResult(trip);
-    }
-
-    @Transactional
-    public TripResponse updateTrip(Long tripid, Long travelId, TripUpdateRequest tripRequest) {
-
-        Travel travel = travelRepository.findTravel(travelId)
-                .orElseThrow(() -> new CustomException(TRAVEL_DOES_NOT_EXIST));
-
-        Trip trip = tripRepository.getTripById(tripid)
-                .orElseThrow(() -> new CustomException(TRIP_DOES_NOT_EXIST));
-
-        trip.update(tripRequest);
-        validPostedAt(travel, trip);
-
-        return TripResponse.toResult(trip);
-    }
-
-    @Transactional
-    public Integer deleteTrip(Long id) {
-
-        return tripRepository.deleteTripById(id)
-                .filter(result -> result == 1)
-                .orElseThrow(() -> new CustomException(DELETE_IS_FAIL));
-
-    }
 }

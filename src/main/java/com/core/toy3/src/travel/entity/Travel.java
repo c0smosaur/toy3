@@ -50,8 +50,9 @@ public class Travel extends BaseEntity {
     @OneToMany(mappedBy = "travel", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private List<Comment> comment = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "travel")
-    private List<UserLike> likes;
+    private List<UserLike> likes = new ArrayList<>();
 
 //    public static Travel fromRequest(TravelRequest travelRequest) {
 //        return Travel.builder()

@@ -33,6 +33,7 @@ public class SecurityConfig {
     // ----(추후 url 수정 예정)----
       .requestMatchers("/api/likes/**").authenticated() // 좋아요 api
       .requestMatchers("/api/travel/**").authenticated() // 여행, 여정 api
+      .requestMatchers("/api/trip/**").authenticated() // 여행, 여정 api
       .requestMatchers("/api/comment/**").authenticated() // 댓글 api
       .requestMatchers(toH2Console()).permitAll() // h2 console 접근 가능
       .anyRequest().permitAll())

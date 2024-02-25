@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -68,5 +69,10 @@ public class MemberController {
     System.out.println(member.getMember());
 
     return Response.response(member);
+  }
+
+  @PostMapping("/login")
+  public ResponseEntity<?> login(MemberRequest member) {
+    return null;
   }
 }
