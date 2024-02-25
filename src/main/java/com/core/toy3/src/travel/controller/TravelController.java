@@ -68,30 +68,6 @@ public class TravelController {
         return Response.response(travelSearchList);
     }
 
-//    @GetMapping("/read/search")
-//    public Response<List<TravelResponse>> SearchTravelByTravelName(@RequestParam(value = "travelName") String keyword) {
-//
-//        List<TravelResponse> travelSearchList = travelService.SearchTravelByTravelName(keyword);
-//
-//        return Response.response(travelSearchList);
-//    }
-//
-//    @GetMapping("/read/search")
-//    public Response<List<TravelResponse>> SearchTravelByDeparture(@RequestParam(value = "departure") String keyword) {
-//
-//        List<TravelResponse> travelSearchList = travelService.SearchTravelByDeparture(keyword);
-//
-//        return Response.response(travelSearchList);
-//    }
-//
-//    @GetMapping("/read/search")
-//    public Response<List<TravelResponse>> SearchTravelByArrival(@RequestParam(value = "arrival") String keyword) {
-//
-//        List<TravelResponse> travelSearchList = travelService.SearchTravelByArrival(keyword);
-//
-//        return Response.response(travelSearchList);
-//    }
-
     @PutMapping("/update-travel/{travelId}") // 1
     public Response<TravelResponse> updateTravel(
             @PathVariable("travelId") long id,

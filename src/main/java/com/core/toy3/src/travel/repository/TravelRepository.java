@@ -67,7 +67,6 @@ public interface TravelRepository extends JpaRepository<Travel, Long> {
             and trim(tv.departure) like concat('%',trim(:keyword), '%')
             order by tv.id asc, t.postedAt asc
             """)
-
     List<Travel> getTravelSearchByDeparture(@Param("keyword") String keyword);
 
     @Query("""

@@ -78,5 +78,6 @@ public class MemberController {
 
   @GetMapping("/logout")
   public ResponseEntity<?> logout(){
-    return null;}
+    return null;
+  }
 }
