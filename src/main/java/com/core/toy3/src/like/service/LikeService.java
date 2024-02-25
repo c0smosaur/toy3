@@ -36,7 +36,7 @@ public class LikeService {
         Travel travel = travelRepository.findById(likeRequest.getTravelId())
                 .orElseThrow(() -> new RuntimeException("Travel not found with ID: " + likeRequest.getTravelId()));
 
-        UserLike existingLike = likeRepository.findByTravel(travel);
+        UserLike existingLike = likeRepository.findByMember(member.getMember());
 
         if (existingLike == null) {
             // 좋아요가 없으면 새로 생성
@@ -61,7 +61,7 @@ public class LikeService {
                 .orElseThrow(() -> new RuntimeException("Member not found with ID: " + memberId));
 
         // Member가 좋아요를 누른 목록을 조회
-        List<UserLike> likes = likeRepository.findByMember(member);
+        List<UserLike> likes = likeRepository.findAllByMember(member);
 
         // LikeResponse로 변환하여 응답
         List<LikeResponse> likeResponses = likes.stream()
