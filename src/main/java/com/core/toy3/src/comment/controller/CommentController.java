@@ -23,7 +23,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/comments")
+@RequestMapping("/api/comment")
 //@RequiredArgsConstructor
 public class CommentController {
 
@@ -33,7 +33,7 @@ public class CommentController {
         this.commentService = commentService;
     }
 
-    @PostMapping("/posts")
+    @PostMapping("/post")
     public Response<CommentResponse> saveComment(
             @AuthenticationPrincipal AuthMember member,
             @RequestBody CommentRequest commentRequest

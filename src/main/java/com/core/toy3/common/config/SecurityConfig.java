@@ -26,7 +26,7 @@ public class SecurityConfig {
     http
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(authz -> authz
-                    .requestMatchers("/api/auth/test").authenticated()
+                    .requestMatchers("/api/auth/logged").authenticated()
                     .requestMatchers("/api/auth/member").authenticated()
       .requestMatchers("/api/auth/logout").authenticated() // 인증된 상태에서만 logout 접근 가능
 

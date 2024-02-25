@@ -65,9 +65,6 @@ public class MemberController {
   public Response<UserDetails> test(@AuthenticationPrincipal AuthMember member) throws Exception{
     String username = member.getUsername();
 
-    System.out.println(username);
-    System.out.println(member.getMember());
-
     return Response.response(member);
   }
 
