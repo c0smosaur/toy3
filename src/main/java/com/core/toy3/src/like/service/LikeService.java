@@ -5,6 +5,7 @@ import com.core.toy3.src.like.entity.UserLike;
 import com.core.toy3.src.like.model.request.LikeRequest;
 import com.core.toy3.src.like.model.response.LikeResponse;
 import com.core.toy3.src.like.repository.UserLikeRepository;
+import com.core.toy3.src.member.entity.AuthMember;
 import com.core.toy3.src.member.entity.Member;
 import com.core.toy3.src.travel.entity.Travel;
 import com.core.toy3.src.travel.repository.TravelRepository;
@@ -30,7 +31,8 @@ public class LikeService {
 
     //좋아요 추가 및 취소 메서드
     @Transactional
-    public Response<LikeResponse> createAndCancelLike(LikeRequest likeRequest) {
+    public Response<LikeResponse> createAndCancelLike(AuthMember member,
+                                                      LikeRequest likeRequest) {
         Travel travel = travelRepository.findById(likeRequest.getTravelId())
                 .orElseThrow(() -> new RuntimeException("Travel not found with ID: " + likeRequest.getTravelId()));
 
@@ -38,7 +40,11 @@ public class LikeService {
 
         if (existingLike == null) {
             // 좋아요가 없으면 새로 생성
-            UserLike like = UserLike.createUserLike(travel);
+
+            UserLike like = UserLike.builder()
+                            .member(member.getMember())
+                                    .travel(travel)
+                                            .build();
             likeRepository.save(like);
             return Response.response(LikeResponse.fromEntity(like));
         } else {

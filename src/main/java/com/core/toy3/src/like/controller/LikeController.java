@@ -26,8 +26,8 @@ public class LikeController {
     @PostMapping("/like-manager")
     public Response<LikeResponse> createAndCancelLike(@AuthenticationPrincipal AuthMember member,
                                                       @RequestBody LikeRequest likeRequest) {
-        likeRequest.setMemberId(member.getMember().getId());
-        return likeService.createAndCancelLike(likeRequest);
+
+        return likeService.createAndCancelLike(member,likeRequest);
     }
 
     // 특정 사용자가 좋아요를 누른 여행 목록 조회
