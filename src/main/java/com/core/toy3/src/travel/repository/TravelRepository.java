@@ -48,5 +48,36 @@ public interface TravelRepository extends JpaRepository<Travel, Long> {
             where tv.id = :travel_id
             """)
     Optional<Travel> findTravel(@Param("travel_id") Long id);
+
+    @Query("""
+            select tv
+            from Travel tv
+            left join fetch tv.trip t
+            where (t is null or t.state = 'ACTIVE')
+            and trim(tv.travelName) like concat('%',:keyword, '%')
+            order by tv.id asc, t.postedAt asc
+            """)
+    List<Travel> getTravelSearchByTravelName(@Param("keyword") String keyword);
+
+    @Query("""
+            select tv
+            from Travel tv
+            left join fetch tv.trip t
+            where (t is null or t.state = 'ACTIVE')
+            and trim(tv.departure) like concat('%',:keyword, '%')
+            order by tv.id asc, t.postedAt asc
+            """)
+
+    List<Travel> getTravelSearchByDeparture(@Param("keyword") String keyword);
+
+    @Query("""
+            select tv
+            from Travel tv
+            left join fetch tv.trip t
+            where (t is null or t.state = 'ACTIVE')
+            and trim(tv.arrival) like concat('%',:keyword, '%')
+            order by tv.id asc, t.postedAt asc
+            """)
+    List<Travel> getTravelSearchByArrival(@Param("keyword") String keyword);
 }
 

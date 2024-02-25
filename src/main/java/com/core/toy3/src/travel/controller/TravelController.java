@@ -1,8 +1,6 @@
 package com.core.toy3.src.travel.controller;
 
-import com.core.toy3.common.exception.CustomException;
 import com.core.toy3.common.response.Response;
-import com.core.toy3.common.response.ResponseStatus;
 import com.core.toy3.src.member.entity.AuthMember;
 import com.core.toy3.src.travel.model.request.TravelRequest;
 import com.core.toy3.src.travel.model.response.TravelResponse;
@@ -12,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -42,6 +41,56 @@ public class TravelController {
 
         return Response.response(travelService.selectTravel(id));
     }
+
+    @GetMapping("/read/search")
+    public Response<List<TravelResponse>> searchTravel(
+            @RequestParam(value = "travelName", required = false) String travelName,
+            @RequestParam(value = "departure", required = false) String departure,
+            @RequestParam(value = "arrival", required = false) String arrival) {
+
+        List<TravelResponse> travelSearchList = travelService.getAllravel(); // 검색 안할경우 전체 리스트 출력
+
+        if (travelName != null && !travelName.trim().isEmpty()) {
+            System.out.println("travelName = " + travelName);
+            travelSearchList = travelService.SearchTravelByTravelName(travelName);
+        }
+
+        if (departure != null && !departure.trim().isEmpty()) {
+            System.out.println("departure = " + departure);
+            travelSearchList = travelService.SearchTravelByDeparture(departure);
+        }
+
+        if (arrival != null && !arrival.trim().isEmpty()) {
+            System.out.println("arrival = " + arrival);
+            travelSearchList = travelService.SearchTravelByArrival(arrival);
+        }
+
+        return Response.response(travelSearchList);
+    }
+
+//    @GetMapping("/read/search")
+//    public Response<List<TravelResponse>> SearchTravelByTravelName(@RequestParam(value = "travelName") String keyword) {
+//
+//        List<TravelResponse> travelSearchList = travelService.SearchTravelByTravelName(keyword);
+//
+//        return Response.response(travelSearchList);
+//    }
+//
+//    @GetMapping("/read/search")
+//    public Response<List<TravelResponse>> SearchTravelByDeparture(@RequestParam(value = "departure") String keyword) {
+//
+//        List<TravelResponse> travelSearchList = travelService.SearchTravelByDeparture(keyword);
+//
+//        return Response.response(travelSearchList);
+//    }
+//
+//    @GetMapping("/read/search")
+//    public Response<List<TravelResponse>> SearchTravelByArrival(@RequestParam(value = "arrival") String keyword) {
+//
+//        List<TravelResponse> travelSearchList = travelService.SearchTravelByArrival(keyword);
+//
+//        return Response.response(travelSearchList);
+//    }
 
     @PutMapping("/update-travel/{travelId}") // 1
     public Response<TravelResponse> updateTravel(

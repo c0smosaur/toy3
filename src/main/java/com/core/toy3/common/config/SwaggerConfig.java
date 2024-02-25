@@ -18,21 +18,52 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class SwaggerConfig {
 
-    String[] paths = {"/travel", "/trip"};
+    String root = "com.core.toy3.src";
+    String[] paths = {
+            ".travel.controller",
+            ".trip.controller",
+            ".member.controller",
+            ".comment.controller",
+            ".like.controller"
+    };
 
     @Bean
-    public GroupedOpenApi getTravelApi() {
+    public GroupedOpenApi getEntireApi() {
         return GroupedOpenApi.builder()
-                .group("travel")
-                .pathsToMatch(paths[0] + "/**")
+                .group("entire")
+                .packagesToScan(root)
                 .build();
     }
 
     @Bean
-    public GroupedOpenApi getTripApi() {
+    public GroupedOpenApi getTravelApi() {
         return GroupedOpenApi.builder()
-                .group("trip")
-                .pathsToMatch(paths[1] + "/**")
+                .group("travel & Trip")
+                .packagesToScan(root + paths[0], root + paths[1])
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi getMemberApi() {
+        return GroupedOpenApi.builder()
+                .group("member")
+                .packagesToScan(root + paths[2])
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi getCommentApi() {
+        return GroupedOpenApi.builder()
+                .group("comment")
+                .packagesToScan(root + paths[3])
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi getLikeApi() {
+        return GroupedOpenApi.builder()
+                .group("like")
+                .packagesToScan(root + paths[4])
                 .build();
     }
 }

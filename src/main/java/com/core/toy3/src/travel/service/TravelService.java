@@ -15,10 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import com.core.toy3.common.exception.CustomException;
-import com.core.toy3.src.travel.model.request.TravelRequest;
-import lombok.RequiredArgsConstructor;
-import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 import static com.core.toy3.common.response.ResponseStatus.*;
 
@@ -90,6 +86,37 @@ public class TravelService {
         return TravelResponse.toResult(travel);
     }
 
+    // travelName 기준으로 검색
+    @Transactional
+    public List<TravelResponse> SearchTravelByTravelName(String keyword) {
+
+        List<Travel> travelSearchByTravelName =
+                travelRepository.getTravelSearchByTravelName(keyword);
+        return travelSearchByTravelName
+                .stream()
+                .map(TravelResponse::toResult).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<TravelResponse> SearchTravelByDeparture(String keyword) {
+
+        List<Travel> travelSearchByTravelName =
+                travelRepository.getTravelSearchByDeparture(keyword);
+        return travelSearchByTravelName
+                .stream()
+                .map(TravelResponse::toResult).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<TravelResponse> SearchTravelByArrival(String keyword) {
+
+        List<Travel> travelSearchByTravelName =
+                travelRepository.getTravelSearchByArrival(keyword);
+        return travelSearchByTravelName
+                .stream()
+                .map(TravelResponse::toResult).collect(Collectors.toList());
+    }
+
     @Transactional
     public TravelResponse updateTravel(long id, TravelRequest travelRequest, AuthMember member) {
 
@@ -123,7 +150,7 @@ public class TravelService {
                 .orElse(null);
     }
 
-
+    // 게시물의 주인이 다른 경우 예외 발생(수정, 삭제)
     private void validateMatches(AuthMember member, Travel travel) {
         if(travel.getMember().getId() != member.getId()) {
             throw new CustomException(HAS_NOT_PERMISSION_TO_ACCESS);
