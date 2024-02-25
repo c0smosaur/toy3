@@ -11,6 +11,7 @@ import java.util.List;
 
 @Repository
 public interface UserLikeRepository extends JpaRepository<UserLike, Long> {
+    UserLike findByMember(Member member);
     UserLike findByTravel(Travel travel);
-    List<UserLike> findByMember(Member member);
+    List<UserLike> findAllByMember(Member member);
 }

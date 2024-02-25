@@ -6,9 +6,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommentRequest {
-    private Long id;
     private Long memberId;
     private Long travelId;
     private String content;
-
 }

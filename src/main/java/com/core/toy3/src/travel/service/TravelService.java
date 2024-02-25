@@ -156,4 +156,12 @@ public class TravelService {
             throw new CustomException(HAS_NOT_PERMISSION_TO_ACCESS);
         }
     }
+    @Transactional
+    public TravelResponse selectTravelLikes(Long id) {
+        Travel travel = travelRepository.getTravelActive(id)
+                .orElseThrow(() -> new CustomException(TRAVEL_DOES_NOT_EXIST));
+
+        return TravelResponse.toResult(travel);
+    }
+
 }

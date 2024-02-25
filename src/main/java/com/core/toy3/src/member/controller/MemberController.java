@@ -41,7 +41,7 @@ public class MemberController {
 
   @GetMapping("/")
   public Response<String> testPage(){
-    return Response.response("default page");
+    return Response.response("this page shows if you need authentication, or if yuu logged out");
   }
 
   @GetMapping("/logged")
@@ -75,4 +75,8 @@ public class MemberController {
   public ResponseEntity<?> login(MemberRequest member) {
     return null;
   }
+
+  @GetMapping("/logout")
+  public ResponseEntity<?> logout(){
+    return null;}
 }

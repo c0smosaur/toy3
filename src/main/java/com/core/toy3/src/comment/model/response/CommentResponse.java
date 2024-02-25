@@ -11,7 +11,7 @@ import lombok.*;
 public class CommentResponse {
     private Long id;
     private Long memberId;
-    private Integer travelId;
+    private Long travelId;
     private String content;
 
 
@@ -19,6 +19,7 @@ public class CommentResponse {
         return CommentResponse.builder()
                 .id(comment.getId())
                 .memberId(comment.getMember().getId())
+                .travelId(comment.getTravel().getId())
                 .content(comment.getContent())
                 .build();
 
