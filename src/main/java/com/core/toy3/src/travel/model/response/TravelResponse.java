@@ -44,6 +44,7 @@ public class TravelResponse {
                 .arrival(travel.getArrival())
                 .departureTime(travel.getDepartureTime())
                 .arrivalTime(travel.getArrivalTime())
+                .likeCount(travel.getLikeCount())
                 .trip(travel.getTrip()
                         .stream()
                         .map(TripResponse::toResult)

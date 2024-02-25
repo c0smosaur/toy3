@@ -123,9 +123,18 @@ public class TravelService {
                 .orElse(null);
     }
 
+
     private void validateMatches(AuthMember member, Travel travel) {
         if(travel.getMember().getId() != member.getId()) {
             throw new CustomException(HAS_NOT_PERMISSION_TO_ACCESS);
         }
     }
+    @Transactional
+    public TravelResponse selectTravelLikes(Long id) {
+        Travel travel = travelRepository.getTravelActive(id)
+                .orElseThrow(() -> new CustomException(TRAVEL_DOES_NOT_EXIST));
+
+        return TravelResponse.toResult(travel);
+    }
+
 }
